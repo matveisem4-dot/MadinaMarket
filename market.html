@@ -3,154 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Доставка Эль-Даба — Сладкая Лавка</title>
+    <title>Daba Delivery System</title>
     <style>
-        :root {
-            --primary: #ff4757;
-            --secondary: #2f3542;
-            --bg: #f1f2f6;
-        }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        
-        /* Статус магазина */
-        .status-banner { padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; font-weight: bold; }
-        .open { background: #e1f5fe; color: #0288d1; }
-        .closed { background: #ffebee; color: #c62828; }
-
-        /* Товары */
-        .product-card { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee; }
-        .price { font-weight: bold; color: var(--primary); }
-        .old-price { text-decoration: line-through; color: #a4b0be; font-size: 0.9em; margin-right: 5px; }
-        
-        /* Форма заказа */
-        .order-form { margin-top: 30px; display: none; background: #fafafa; padding: 15px; border-radius: 10px; }
-        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        
-        /* Кнопки */
-        .btn { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; cursor: pointer; }
-        .btn:disabled { background: #ccc; }
-        .admin-section { margin-top: 50px; border-top: 2px dashed #ccc; padding-top: 20px; opacity: 0.3; transition: 0.3s; }
-        .admin-section:hover { opacity: 1; }
-        
-        #map-status { font-size: 0.8em; color: #747d8c; margin-top: 5px; }
+        :root { --p: #ff4757; --s: #2f3542; --bg: #f1f2f6; }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 15px; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
+        .status { padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 15px; }
+        .open { background: #dff9fb; color: #0984e3; }
+        .closed { background: #fab1a0; color: #d63031; }
+        .product { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0; }
+        .btn { background: var(--p); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; }
+        .admin { margin-top: 30px; padding: 15px; border: 1px dashed #ccc; border-radius: 10px; background: #fafafa; }
+        input, select { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        .cart-badge { background: var(--p); color: white; padding: 2px 8px; border-radius: 10px; font-size: 12px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="shop-header">
-        <h1>🚀 Доставка Эль-Даба</h1>
-        <div id="status-msg" class="status-banner open">Магазин открыт! Готовься к сладкому!</div>
-    </div>
+<div class="card">
+    <h2>🚀 Доставка Эль-Даба <span id="cart-count" class="cart-badge">0</span></h2>
+    <div id="status-box" class="status">Загрузка...</div>
 
-    <div id="products-list"></div>
+    <div id="menu-area"></div>
 
-    <div id="order-section" class="order-form">
-        <h3>Оформление заказа</h3>
-        <select id="payment-method">
-            <option value="cash">Наличные</option>
-            <option value="instapay">InstaPay (на номер: +20123456789)</option>
-        </select>
-        <input type="text" id="address" placeholder="Ваш адрес (дом, квартира)">
-        <label><input type="checkbox" id="to-door"> Доставить до двери</label>
-        
-        <div id="map-area">
-            <button onclick="getLocation()" style="font-size: 12px;">📍 Где сейчас курьер?</button>
-            <div id="map-status">Геолокация выключена</div>
-        </div>
-        
-        <button class="btn" onclick="sendOrder()" style="margin-top:15px;">Подтвердить заказ</button>
-    </div>
-
-    <div class="admin-section">
-        <h4>🔐 Админ-панель (Только для владельца)</h4>
-        <button onclick="toggleShop()" id="toggle-btn" style="background:#2f3542; color:white;">Выключить магазин на 2 часа</button>
+    <div id="order-form" style="display:none; margin-top:20px;">
         <hr>
-        <input type="text" id="new-name" placeholder="Название товара">
-        <input type="number" id="new-price" placeholder="Цена">
-        <input type="number" id="new-discount" placeholder="Скидка (если есть)">
-        <button onclick="addProduct()">Добавить товар</button>
+        <h4>Оформление</h4>
+        <input type="text" id="cust-addr" placeholder="Адрес (Дом, квартира)">
+        <select id="cust-pay">
+            <option value="Наличные">Наличные</option>
+            <option value="InstaPay">InstaPay</option>
+        </select>
+        <label><input type="checkbox" id="cust-door"> До двери</label>
+        <button class="btn" onclick="checkout()">Заказать</button>
+    </div>
+
+    <div class="admin">
+        <h4>🔐 Управление (Для тебя)</h4>
+        <input type="password" id="gh-token" placeholder="GitHub Token (Classic)">
+        <button onclick="toggleStore()" style="background:#2f3542; color:white; width:100%; border-radius:5px; padding:5px;">Вкл/Выкл Магазин</button>
+        <div style="margin-top:10px;">
+            <input type="text" id="p-name" placeholder="Название">
+            <input type="number" id="p-price" placeholder="Цена">
+            <button onclick="addNewProduct()" style="width:100%;">Добавить товар</button>
+        </div>
     </div>
 </div>
 
 <script>
-    let isWorking = true;
-    let products = [
-        { id: 1, name: "Сладкая вата", price: 30, discount: 5 },
-        { id: 2, name: "Молочный коктейль", price: 50, discount: 0 }
-    ];
+    // КОНФИГУР ПУТЬ
+    const OWNER = 'matveisem4-dot'; 
+    const REPO = 'MadinaMarket';
+    const PATH = 'database.json';
 
-    function renderProducts() {
-        const list = document.getElementById('products-list');
-        const orderSection = document.getElementById('order-section');
-        const statusMsg = document.getElementById('status-msg');
-        
-        if (!isWorking) {
-            list.innerHTML = `<div style="text-align:center; padding:40px;">
-                <h2>😴 К сожалению, сейчас приложение временно не работает.</h2>
-                <p>Мой электросамокат на зарядке. Зайдите через 2 часа!</p>
-            </div>`;
-            orderSection.style.display = 'none';
-            statusMsg.className = 'status-banner closed';
-            statusMsg.innerText = 'Магазин на паузе';
-            return;
-        }
+    let db = { isWorking: true, products: [] };
+    let cart = [];
 
-        statusMsg.className = 'status-banner open';
-        statusMsg.innerText = 'Магазин открыт!';
-        orderSection.style.display = 'block';
-        
-        list.innerHTML = products.map(p => `
-            <div class="product-card">
-                <div>
-                    <strong>${p.name}</strong><br>
-                    <span class="price">${p.price - p.discount} EGP</span>
-                    ${p.discount > 0 ? `<span class="old-price">${p.price} EGP</span>` : ''}
+    // 1. ЗАГРУЗКА ИЗ GITHUB
+    async function loadDB() {
+        try {
+            const r = await fetch(`https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${PATH}?nocache=${Date.now()}`);
+            db = await r.json();
+            render();
+        } catch (e) { console.error("Ошибка загрузки"); }
+    }
+
+    function render() {
+        const statusBox = document.getElementById('status-box');
+        const menu = document.getElementById('menu-area');
+        const orderForm = document.getElementById('order-form');
+
+        if (!db.isWorking) {
+            statusBox.className = "status closed";
+            statusBox.innerText = "⚡ Самокат на зарядке. Зайдите через 2 часа";
+            menu.innerHTML = "";
+            orderForm.style.display = "none";
+        } else {
+            statusBox.className = "status open";
+            statusBox.innerText = "✅ Магазин открыт!";
+            orderForm.style.display = "block";
+            menu.innerHTML = db.products.map((p, i) => `
+                <div class="product">
+                    <span>${p.name} - <b>${p.price} EGP</b></span>
+                    <button onclick="addToCart(${i})">+</button>
                 </div>
-                <button onclick="alert('Добавлено в заказ!')">+</button>
-            </div>
-        `).join('');
+            `).join('');
+        }
+        document.getElementById('cart-count').innerText = cart.length;
     }
 
-    function toggleShop() {
-        isWorking = !isWorking;
-        document.getElementById('toggle-btn').innerText = isWorking ? "Выключить магазин" : "Включить магазин";
-        renderProducts();
+    function addToCart(i) {
+        cart.push(db.products[i]);
+        render();
     }
 
-    function addProduct() {
-        const name = document.getElementById('new-name').value;
-        const price = parseInt(document.getElementById('new-price').value);
-        const discount = parseInt(document.getElementById('new-discount').value) || 0;
+    // 2. СОХРАНЕНИЕ В GITHUB (API)
+    async function saveDB() {
+        const token = document.getElementById('gh-token').value;
+        if (!token) return alert("Введите токен!");
+
+        const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
         
-        if(name && price) {
-            products.push({ id: Date.now(), name, price, discount });
-            renderProducts();
+        // Получаем SHA
+        const fileData = await fetch(url).then(r => r.json());
+        
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: "update db",
+                content: btoa(unescape(encodeURIComponent(JSON.stringify(db, null, 2)))),
+                sha: fileData.sha
+            })
+        });
+
+        if (response.ok) { alert("Успешно сохранено!"); loadDB(); }
+        else { alert("Ошибка! Проверь токен."); }
+    }
+
+    function toggleStore() {
+        db.isWorking = !db.isWorking;
+        saveDB();
+    }
+
+    function addNewProduct() {
+        const name = document.getElementById('p-name').value;
+        const price = document.getElementById('p-price').value;
+        if (name && price) {
+            db.products.push({ name, price: parseInt(price) });
+            saveDB();
         }
     }
 
-    function getLocation() {
-        const status = document.getElementById('map-status');
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((pos) => {
-                status.innerText = `Курьер в пути: Широта ${pos.coords.latitude.toFixed(4)}`;
-            }, () => {
-                status.innerText = "К сожалению, локация выключена";
-            });
-        }
-    }
-
-    function sendOrder() {
-        const addr = document.getElementById('address').value;
-        const pay = document.getElementById('payment-method').value;
-        if(!addr) return alert("Введите адрес!");
+    function checkout() {
+        const addr = document.getElementById('cust-addr').value;
+        if (!addr || cart.length === 0) return alert("Корзина пуста или нет адреса!");
         
-        alert(`Заказ принят!\nАдрес: ${addr}\nОплата: ${pay}\nСкоро буду на самокате!`);
+        let text = `Заказ из Эль-Дабы!%0A%0A` + 
+                   cart.map(c => `- ${c.name}`).join('%0A') + 
+                   `%0A%0A📍 Адрес: ${addr}%0A💳 Оплата: ${document.getElementById('cust-pay').value}`;
+        
+        // Открываем WhatsApp (номер замени на свой)
+        window.open(`https://wa.me/201000000000?text=${text}`);
+        cart = [];
+        render();
     }
 
-    renderProducts();
+    loadDB();
 </script>
-
 </body>
 </html>
