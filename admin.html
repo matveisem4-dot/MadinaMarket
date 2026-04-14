@@ -1,111 +1,775 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Daba Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madina Market - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; background: #2c3e50; color: white; padding: 20px; }
-        .panel { max-width: 400px; margin: auto; background: #34495e; padding: 20px; border-radius: 10px; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-bottom: 10px; }
-        .btn-toggle { background: #f1c40f; color: #2c3e50; }
-        .btn-add { background: #2ecc71; color: white; }
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .dark-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+        .card-gradient {
+            background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+        }
+        .glow-border {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+        }
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        .status-toggle {
+            transition: all 0.3s ease;
+        }
+        .status-toggle.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        .status-toggle.inactive {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
     </style>
 </head>
-<body>
+<body class="dark-gradient min-h-screen text-white">
+    <!-- Header -->
+    <header class="bg-slate-900/50 backdrop-blur-xl border-b border-slate-700/50 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">Madina Market</h1>
+                        <p class="text-xs text-slate-400">Admin Dashboard</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div id="connectionStatus" class="flex items-center gap-2 px-3 py-1.5 bg-slate-800 rounded-lg text-sm">
+                        <span class="w-2 h-2 rounded-full bg-yellow-500" id="statusDot"></span>
+                        <span id="statusText">Not Connected</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-<div class="panel">
-    <h2>Управление магазином</h2>
-    <input type="password" id="token" placeholder="GitHub Token">
-    <hr>
-    <button class="btn-toggle" onclick="changeStatus()">ВКЛ / ВЫКЛ МАГАЗИН</button>
-    <hr>
-    <h4>Добавить товар</h4>
-    <input type="text" id="name" placeholder="Название (напр. Сладкая вата)">
-    <input type="number" id="price" placeholder="Цена (EGP)">
-    <button class="btn-add" onclick="addNew()">ДОБАВИТЬ В МЕНЮ</button>
-</div>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- GitHub Token Section -->
+        <section class="mb-8">
+            <div class="card-gradient rounded-2xl p-6 border border-slate-700/50 glow-border">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <svg class="w-6 h-6 text-indigo-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-semibold mb-2">GitHub Authentication</h3>
+                        <p class="text-slate-400 text-sm mb-4">Enter your GitHub Personal Access Token to manage the store. The token will be stored locally in your browser.</p>
+                        <div class="flex gap-3">
+                            <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxx" class="flex-1 px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent font-mono text-sm">
+                            <button onclick="saveToken()" class="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl font-medium hover:opacity-90 transition-opacity">
+                                Connect
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<script>
-    const OWNER = 'matveisem4-dot';
-    const REPO = 'MadinaMarket';
-    const PATH = 'database.json';
+        <!-- Dashboard Tabs -->
+        <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+            <button onclick="showTab('products')" class="tab-btn active px-6 py-3 rounded-xl font-medium transition-all" data-tab="products">
+                Products
+            </button>
+            <button onclick="showTab('orders')" class="tab-btn px-6 py-3 rounded-xl font-medium transition-all" data-tab="orders">
+                Orders
+            </button>
+            <button onclick="showTab('settings')" class="tab-btn px-6 py-3 rounded-xl font-medium transition-all" data-tab="settings">
+                Settings
+            </button>
+        </div>
 
-    async function sendUpdate(newData) {
-        const token = document.getElementById('token').value;
-        if (!token) return alert("Нужен токен!");
+        <!-- Products Tab -->
+        <div id="productsTab" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Add Product Form -->
+                <div class="lg:col-span-1">
+                    <div class="card-gradient rounded-2xl p-6 border border-slate-700/50">
+                        <h3 class="text-lg font-semibold mb-4">Add New Product</h3>
+                        <form id="addProductForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Product Name *</label>
+                                <input type="text" id="productName" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Price (EGP) *</label>
+                                <input type="number" id="productPrice" step="0.01" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Category</label>
+                                <input type="text" id="productCategory" class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="e.g., Vegetables, Fruits">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Description</label>
+                                <textarea id="productDescription" rows="3" class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Image URL</label>
+                                <input type="url" id="productImage" class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="https://...">
+                            </div>
+                            <button type="submit" class="w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl font-medium hover:opacity-90 transition-opacity">
+                                Add Product
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Products List -->
+                <div class="lg:col-span-2">
+                    <div class="card-gradient rounded-2xl p-6 border border-slate-700/50">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">Products List</h3>
+                            <span id="productCount" class="px-3 py-1 bg-slate-800 rounded-lg text-sm text-slate-400">0 products</span>
+                        </div>
+                        <div id="productsList" class="space-y-3 max-h-[600px] overflow-y-auto scrollbar-thin">
+                            <div class="text-center py-12 text-slate-500">
+                                <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                </svg>
+                                <p>Connect to GitHub to view products</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
-        const currentFile = await fetch(url).then(r => r.json());
+        <!-- Orders Tab -->
+        <div id="ordersTab" class="tab-content hidden">
+            <div class="card-gradient rounded-2xl p-6 border border-slate-700/50">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h3 class="text-lg font-semibold">Orders</h3>
+                        <p class="text-slate-400 text-sm">Manage incoming orders</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="refreshOrders()" class="px-4 py-2 bg-slate-800 rounded-xl text-sm font-medium hover:bg-slate-700 transition-colors">
+                            <span class="flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                </svg>
+                                Refresh
+                            </span>
+                        </button>
+                        <button onclick="clearAllOrders()" class="px-4 py-2 bg-red-500/20 text-red-400 rounded-xl text-sm font-medium hover:bg-red-500/30 transition-colors">
+                            <span class="flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                                Clear All
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <div id="ordersList" class="space-y-4">
+                    <div class="text-center py-12 text-slate-500">
+                        <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                        </svg>
+                        <p>Connect to GitHub to view orders</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        const res = await fetch(url, {
-            method: 'PUT',
-            headers: { 'Authorization': `token ${token}` },
-            body: JSON.stringify({
-                message: "admin update",
-                content: btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2)))),
-                sha: currentFile.sha
-            })
-        });
+        <!-- Settings Tab -->
+        <div id="settingsTab" class="tab-content hidden">
+            <div class="card-gradient rounded-2xl p-6 border border-slate-700/50">
+                <h3 class="text-lg font-semibold mb-6">Store Settings</h3>
+                <div class="space-y-6">
+                    <!-- Store Status Toggle -->
+                    <div class="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl">
+                        <div>
+                            <h4 class="font-medium">Store Status</h4>
+                            <p class="text-slate-400 text-sm">Control whether customers can place orders</p>
+                        </div>
+                        <button id="storeStatusToggle" onclick="toggleStoreStatus()" class="status-toggle inactive px-6 py-3 rounded-xl font-medium transition-all">
+                            <span id="storeStatusText">Closed</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Repository Info -->
+                    <div class="p-4 bg-slate-800/50 rounded-xl">
+                        <h4 class="font-medium mb-3">Repository Information</h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Owner</span>
+                                <span class="font-mono text-indigo-400">matveisem4-dot</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Repository</span>
+                                <span class="font-mono text-indigo-400">MadinaMarket</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Database File</span>
+                                <span class="font-mono text-indigo-400">database.json</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Orders File</span>
+                                <span class="font-mono text-indigo-400">orders.json</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-        if (res.ok) alert("Обновлено!"); else alert("Ошибка! Проверь токен.");
-    }
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-slate-800 border border-slate-700 text-white px-6 py-3 rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <span id="toastMessage"></span>
+    </div>
 
-    async function changeStatus() {
-        const db = await fetch(`https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${PATH}?t=${Date.now()}`).then(r => r.json());
-        db.isWorking = !db.isWorking;
-        sendUpdate(db);
-    }
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+        <div class="card-gradient rounded-2xl p-8 text-center">
+            <div class="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p id="loadingText" class="text-slate-300">Loading...</p>
+        </div>
+    </div>
 
-    async function addNew() {
-        const db = await fetch(`https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${PATH}?t=${Date.now()}`).then(r => r.json());
-        const n = document.getElementById('name').value;
-        const p = document.getElementById('price').value;
-        if (n && p) {
-            db.products.push({ name: n, price: p });
-            async function sendUpdate(newData) {
-    const token = document.getElementById('token').value;
-    if (!token) return alert("Нужен токен!");
+    <script>
+        // Configuration
+        const CONFIG = {
+            owner: 'matveisem4-dot',
+            repo: 'MadinaMarket',
+            databasePath: 'database.json',
+            ordersPath: 'orders.json'
+        };
 
-    const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
+        // State
+        let githubToken = localStorage.getItem('madina_github_token') || '';
+        let products = [];
+        let orders = [];
+        let isWorking = true;
 
-    try {
-        // 1. Прямо перед отправкой ВСЕГДА берем свежий SHA
-        const currentFile = await fetch(url, {
-            headers: { 'Authorization': `token ${token}` },
-            cache: "no-store" // Запрещаем браузеру брать старые данные из кэша
-        }).then(r => r.json());
-
-        if (!currentFile.sha) {
-            alert("Файл database.json не найден в репозитории!");
-            return;
+        // Utility: UTF-8 Base64 encoding
+        function utf8_to_b64(str) {
+            return btoa(unescape(encodeURIComponent(str)));
         }
 
-        // 2. Отправляем обновление с актуальным SHA
-        const res = await fetch(url, {
-            method: 'PUT',
-            headers: { 
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json' 
-            },
-            body: JSON.stringify({
-                message: "admin update",
-                content: btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2)))),
-                sha: currentFile.sha // Используем самый свежий SHA
-            })
-        });
-
-        if (res.ok) {
-            alert("✅ Данные в MadinaMarket обновлены!");
-        } else {
-            const errData = await res.json();
-            alert("Ошибка GitHub: " + errData.message);
+        // Utility: UTF-8 Base64 decoding
+        function b64_to_utf8(str) {
+            return decodeURIComponent(escape(atob(str)));
         }
-    } catch (e) {
-        console.error(e);
-        alert("Произошла ошибка при связи с GitHub");
-    }
-}
-</script>
+
+        // GitHub API Functions
+        async function fetchFile(path, token) {
+            const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${path}`;
+            const headers = token ? { 'Authorization': `token ${token}` } : {};
+            const response = await fetch(url, { headers });
+            if (!response.ok) throw new Error(`Failed to fetch ${path}`);
+            const data = await response.json();
+            return JSON.parse(b64_to_utf8(data.content));
+        }
+
+        async function getFileWithSha(path, token) {
+            const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${path}`;
+            const headers = { 'Authorization': `token ${token}` };
+            const response = await fetch(url, { headers });
+            if (!response.ok) throw new Error(`Failed to fetch ${path}`);
+            const data = await response.json();
+            return {
+                content: JSON.parse(b64_to_utf8(data.content)),
+                sha: data.sha
+            };
+        }
+
+        async function updateFile(path, content, sha, token, message) {
+            const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${path}`;
+            const encodedContent = utf8_to_b64(JSON.stringify(content, null, 2));
+
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: message || `Update ${path}`,
+                    content: encodedContent,
+                    sha: sha
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'Failed to update file');
+            }
+            return await response.json();
+        }
+
+        // UI Functions
+        function showLoading(text = 'Loading...') {
+            document.getElementById('loadingText').textContent = text;
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.add('hidden');
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+
+            if (type === 'error') {
+                toast.classList.add('border-red-500');
+            } else if (type === 'success') {
+                toast.classList.add('border-green-500');
+            }
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+                toast.classList.remove('border-red-500', 'border-green-500');
+            }, 3000);
+        }
+
+        function updateConnectionStatus(connected) {
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+
+            if (connected) {
+                statusDot.classList.remove('bg-yellow-500');
+                statusDot.classList.add('bg-green-500');
+                statusText.textContent = 'Connected';
+            } else {
+                statusDot.classList.remove('bg-green-500');
+                statusDot.classList.add('bg-yellow-500');
+                statusText.textContent = 'Not Connected';
+            }
+        }
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active', 'bg-indigo-500'));
+
+            document.getElementById(`${tabName}Tab`).classList.remove('hidden');
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active', 'bg-indigo-500');
+        }
+
+        // Token Management
+        function saveToken() {
+            const tokenInput = document.getElementById('githubToken');
+            const token = tokenInput.value.trim();
+
+            if (!token) {
+                showToast('Please enter a GitHub token', 'error');
+                return;
+            }
+
+            githubToken = token;
+            localStorage.setItem('madina_github_token', token);
+            tokenInput.value = '';
+
+            loadData();
+        }
+
+        // Load Data
+        async function loadData() {
+            if (!githubToken) {
+                updateConnectionStatus(false);
+                return;
+            }
+
+            try {
+                showLoading('Loading data...');
+
+                const data = await fetchFile(CONFIG.databasePath, githubToken);
+                products = data.products || [];
+                isWorking = data.isWorking !== false;
+
+                orders = await fetchFile(CONFIG.ordersPath, githubToken);
+                if (!Array.isArray(orders)) orders = [];
+
+                updateConnectionStatus(true);
+                renderProducts();
+                renderOrders();
+                updateStoreStatusUI();
+
+                showToast('Connected successfully!', 'success');
+            } catch (error) {
+                console.error('Load error:', error);
+                updateConnectionStatus(false);
+                showToast('Failed to load data: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Products Management
+        function renderProducts() {
+            const list = document.getElementById('productsList');
+            const count = document.getElementById('productCount');
+            
+            count.textContent = `${products.length} products`;
+            
+            if (products.length === 0) {
+                list.innerHTML = `
+                    <div class="text-center py-12 text-slate-500">
+                        <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                        <p>No products yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            list.innerHTML = products.map(product => `
+                <div class="flex items-center gap-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700/50 hover:border-slate-600 transition-colors">
+                    <div class="w-16 h-16 bg-slate-700 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        ${product.image 
+                            ? `<img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                               <div class="hidden w-full h-full items-center justify-center text-slate-500">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                               </div>`
+                            : `<svg class="w-8 h-8 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                               </svg>`
+                        }
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-medium text-white truncate">${product.name}</h4>
+                        <p class="text-indigo-400 font-semibold">EGP ${product.price.toFixed(2)}</p>
+                        ${product.category ? `<span class="text-xs text-slate-400">${product.category}</span>` : ''}
+                    </div>
+                    <button onclick="deleteProduct('${product.id}')" class="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/20 rounded-lg transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        async function addProduct(e) {
+            e.preventDefault();
+
+            if (!githubToken) {
+                showToast('Please connect to GitHub first', 'error');
+                return;
+            }
+
+            const newProduct = {
+                id: Date.now().toString(),
+                name: document.getElementById('productName').value,
+                price: parseFloat(document.getElementById('productPrice').value),
+                category: document.getElementById('productCategory').value || null,
+                description: document.getElementById('productDescription').value || null,
+                image: document.getElementById('productImage').value || null
+            };
+
+            try {
+                showLoading('Adding product...');
+
+                // Get latest SHA
+                const { content: data, sha } = await getFileWithSha(CONFIG.databasePath, githubToken);
+
+                // Add product
+                data.products = data.products || [];
+                data.products.push(newProduct);
+
+                // Update
+                await updateFile(CONFIG.databasePath, data, sha, githubToken, 'Add new product');
+
+                products = data.products;
+                renderProducts();
+
+                // Reset form
+                document.getElementById('addProductForm').reset();
+
+                showToast('Product added successfully!', 'success');
+            } catch (error) {
+                console.error('Add product error:', error);
+                showToast('Failed to add product: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function deleteProduct(productId) {
+            if (!githubToken) {
+                showToast('Please connect to GitHub first', 'error');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to delete this product?')) return;
+
+            try {
+                showLoading('Deleting product...');
+
+                // Get latest SHA
+                const { content: data, sha } = await getFileWithSha(CONFIG.databasePath, githubToken);
+
+                // Remove product
+                data.products = data.products.filter(p => p.id !== productId);
+
+                // Update
+                await updateFile(CONFIG.databasePath, data, sha, githubToken, 'Delete product');
+
+                products = data.products;
+                renderProducts();
+
+                showToast('Product deleted successfully!', 'success');
+            } catch (error) {
+                console.error('Delete product error:', error);
+                showToast('Failed to delete product: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Orders Management
+        function renderOrders() {
+            const list = document.getElementById('ordersList');
+
+            if (!Array.isArray(orders) || orders.length === 0) {
+                list.innerHTML = `
+                    <div class="text-center py-12 text-slate-500">
+                        <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                        </svg>
+                        <p>No orders yet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by timestamp (newest first)
+            const sortedOrders = [...orders].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            list.innerHTML = sortedOrders.map(order => `
+                <div class="bg-slate-800/50 rounded-xl border border-slate-700/50 overflow-hidden">
+                    <div class="p-4 border-b border-slate-700/50 flex justify-between items-start">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-mono text-sm text-indigo-400">#${order.id?.slice(-6) || 'N/A'}</span>
+                                <select onchange="updateOrderStatus('${order.id}', this.value)" class="px-2 py-0.5 text-xs rounded-full bg-slate-700 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>⏳ Pending</option>
+                                    <option value="preparing" ${order.status === 'preparing' ? 'selected' : ''}>👨‍🍳 Preparing</option>
+                                    <option value="delivering" ${order.status === 'delivering' ? 'selected' : ''}>🚚 Delivering</option>
+                                    <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>✅ Delivered</option>
+                                    <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>❌ Cancelled</option>
+                                </select>
+                            </div>
+                            <p class="text-slate-400 text-sm">${new Date(order.timestamp).toLocaleString()}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xl font-bold">EGP ${(order.total || 0).toFixed(2)}</p>
+                        </div>
+                    </div>
+                    <div class="p-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        <div class="lg:col-span-2">
+                            <h5 class="text-sm font-medium text-slate-400 mb-2">📦 Customer & Delivery</h5>
+                            <div class="space-y-2">
+                                <p class="font-medium">${order.customer?.name || 'N/A'}</p>
+                                <p class="text-slate-400 text-sm">📱 ${order.customer?.phone || 'N/A'}</p>
+                                <div class="bg-slate-900/50 rounded-lg p-3 mt-2">
+                                    <p class="text-xs text-slate-400 mb-1">📍 Delivery Address:</p>
+                                    <p class="text-sm text-white font-medium">${order.customer?.address || 'N/A'}</p>
+                                </div>
+                                ${order.delivery?.leaveAtDoor ? `
+                                    <div class="flex items-center gap-2 text-yellow-400 text-sm mt-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                                        </svg>
+                                        <span>Leave at door</span>
+                                    </div>
+                                ` : `
+                                    <div class="flex items-center gap-2 text-green-400 text-sm mt-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                                        </svg>
+                                        <span>Hand delivery required</span>
+                                    </div>
+                                `}
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="text-sm font-medium text-slate-400 mb-2">🛒 Items</h5>
+                            <div class="space-y-1 max-h-40 overflow-y-auto scrollbar-thin">
+                                ${(order.items || []).map(item => `
+                                    <div class="flex justify-between text-sm py-1 border-b border-slate-700/50">
+                                        <span>${item.name} x${item.quantity}</span>
+                                        <span class="text-slate-400">EGP ${(item.price * item.quantity).toFixed(2)}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function refreshOrders() {
+            if (!githubToken) {
+                showToast('Please connect to GitHub first', 'error');
+                return;
+            }
+
+            try {
+                showLoading('Refreshing orders...');
+                orders = await fetchFile(CONFIG.ordersPath, githubToken);
+                if (!Array.isArray(orders)) orders = [];
+                renderOrders();
+                showToast('Orders refreshed!', 'success');
+            } catch (error) {
+                console.error('Refresh orders error:', error);
+                showToast('Failed to refresh orders: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function updateOrderStatus(orderId, newStatus) {
+            if (!githubToken) {
+                showToast('Please connect to GitHub first', 'error');
+                return;
+            }
+
+            try {
+                // Find and update order
+                const orderIndex = orders.findIndex(o => o.id === orderId);
+                if (orderIndex === -1) return;
+
+                orders[orderIndex].status = newStatus;
+
+                // Get latest SHA
+                const { sha } = await getFileWithSha(CONFIG.ordersPath, githubToken);
+
+                // Update orders
+                await updateFile(CONFIG.ordersPath, orders, sha, githubToken, `Update order ${orderId} status`);
+
+                showToast('Order status updated!', 'success');
+            } catch (error) {
+                console.error('Update order status error:', error);
+                showToast('Failed to update status: ' + error.message, 'error');
+                // Revert on error
+                renderOrders();
+            }
+        }
+
+        async function clearAllOrders() {
+            if (!githubToken) {
+                showToast('Please connect to GitHub first', 'error');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to delete ALL orders? This cannot be undone!')) return;
+
+            try {
+                showLoading('Clearing orders...');
+
+                // Get latest SHA
+                const { sha } = await getFileWithSha(CONFIG.ordersPath, githubToken);
+
+                // Clear orders
+                await updateFile(CONFIG.ordersPath, [], sha, githubToken, 'Clear all orders');
+
+                orders = [];
+                renderOrders();
+
+                showToast('All orders cleared!', 'success');
+            } catch (error) {
+                console.error('Clear orders error:', error);
+                showToast('Failed to clear orders: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Store Status
+        function updateStoreStatusUI() {
+            const toggle = document.getElementById('storeStatusToggle');
+            const text = document.getElementById('storeStatusText');
+            
+            toggle.classList.remove('active', 'inactive');
+            
+            if (isWorking) {
+                toggle.classList.add('active');
+                text.textContent = 'Open';
+            } else {
+                toggle.classList.add('inactive');
+                text.textContent = 'Closed';
+            }
+        }
+
+        async function toggleStoreStatus() {
+            if (!githubToken) {
+                showToast('Please connect to GitHub first', 'error');
+                return;
+            }
+
+            try {
+                showLoading('Updating store status...');
+
+                // Get latest SHA
+                const { content: data, sha } = await getFileWithSha(CONFIG.databasePath, githubToken);
+
+                // Toggle status
+                data.isWorking = !data.isWorking;
+                isWorking = data.isWorking;
+
+                // Update
+                await updateFile(CONFIG.databasePath, data, sha, githubToken, 'Toggle store status');
+
+                updateStoreStatusUI();
+
+                showToast(`Store is now ${isWorking ? 'OPEN' : 'CLOSED'}`, 'success');
+            } catch (error) {
+                console.error('Toggle status error:', error);
+                showToast('Failed to toggle status: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('addProductForm').addEventListener('submit', addProduct);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved token
+            if (githubToken) {
+                loadData();
+            }
+
+            // Style active tab
+            document.querySelector('.tab-btn.active').classList.add('bg-indigo-500');
+        });
+    </script>
 </body>
 </html>
