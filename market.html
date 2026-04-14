@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Доставка Эль-Даба — Сладкая Лавка</title>
+    <style>
+        :root {
+            --primary: #ff4757;
+            --secondary: #2f3542;
+            --bg: #f1f2f6;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        
+        /* Статус магазина */
+        .status-banner { padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; font-weight: bold; }
+        .open { background: #e1f5fe; color: #0288d1; }
+        .closed { background: #ffebee; color: #c62828; }
+
+        /* Товары */
+        .product-card { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee; }
+        .price { font-weight: bold; color: var(--primary); }
+        .old-price { text-decoration: line-through; color: #a4b0be; font-size: 0.9em; margin-right: 5px; }
+        
+        /* Форма заказа */
+        .order-form { margin-top: 30px; display: none; background: #fafafa; padding: 15px; border-radius: 10px; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        
+        /* Кнопки */
+        .btn { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; cursor: pointer; }
+        .btn:disabled { background: #ccc; }
+        .admin-section { margin-top: 50px; border-top: 2px dashed #ccc; padding-top: 20px; opacity: 0.3; transition: 0.3s; }
+        .admin-section:hover { opacity: 1; }
+        
+        #map-status { font-size: 0.8em; color: #747d8c; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="shop-header">
+        <h1>🚀 Доставка Эль-Даба</h1>
+        <div id="status-msg" class="status-banner open">Магазин открыт! Готовься к сладкому!</div>
+    </div>
+
+    <div id="products-list"></div>
+
+    <div id="order-section" class="order-form">
+        <h3>Оформление заказа</h3>
+        <select id="payment-method">
+            <option value="cash">Наличные</option>
+            <option value="instapay">InstaPay (на номер: +20123456789)</option>
+        </select>
+        <input type="text" id="address" placeholder="Ваш адрес (дом, квартира)">
+        <label><input type="checkbox" id="to-door"> Доставить до двери</label>
+        
+        <div id="map-area">
+            <button onclick="getLocation()" style="font-size: 12px;">📍 Где сейчас курьер?</button>
+            <div id="map-status">Геолокация выключена</div>
+        </div>
+        
+        <button class="btn" onclick="sendOrder()" style="margin-top:15px;">Подтвердить заказ</button>
+    </div>
+
+    <div class="admin-section">
+        <h4>🔐 Админ-панель (Только для владельца)</h4>
+        <button onclick="toggleShop()" id="toggle-btn" style="background:#2f3542; color:white;">Выключить магазин на 2 часа</button>
+        <hr>
+        <input type="text" id="new-name" placeholder="Название товара">
+        <input type="number" id="new-price" placeholder="Цена">
+        <input type="number" id="new-discount" placeholder="Скидка (если есть)">
+        <button onclick="addProduct()">Добавить товар</button>
+    </div>
+</div>
+
+<script>
+    let isWorking = true;
+    let products = [
+        { id: 1, name: "Сладкая вата", price: 30, discount: 5 },
+        { id: 2, name: "Молочный коктейль", price: 50, discount: 0 }
+    ];
+
+    function renderProducts() {
+        const list = document.getElementById('products-list');
+        const orderSection = document.getElementById('order-section');
+        const statusMsg = document.getElementById('status-msg');
+        
+        if (!isWorking) {
+            list.innerHTML = `<div style="text-align:center; padding:40px;">
+                <h2>😴 К сожалению, сейчас приложение временно не работает.</h2>
+                <p>Мой электросамокат на зарядке. Зайдите через 2 часа!</p>
+            </div>`;
+            orderSection.style.display = 'none';
+            statusMsg.className = 'status-banner closed';
+            statusMsg.innerText = 'Магазин на паузе';
+            return;
+        }
+
+        statusMsg.className = 'status-banner open';
+        statusMsg.innerText = 'Магазин открыт!';
+        orderSection.style.display = 'block';
+        
+        list.innerHTML = products.map(p => `
+            <div class="product-card">
+                <div>
+                    <strong>${p.name}</strong><br>
+                    <span class="price">${p.price - p.discount} EGP</span>
+                    ${p.discount > 0 ? `<span class="old-price">${p.price} EGP</span>` : ''}
+                </div>
+                <button onclick="alert('Добавлено в заказ!')">+</button>
+            </div>
+        `).join('');
+    }
+
+    function toggleShop() {
+        isWorking = !isWorking;
+        document.getElementById('toggle-btn').innerText = isWorking ? "Выключить магазин" : "Включить магазин";
+        renderProducts();
+    }
+
+    function addProduct() {
+        const name = document.getElementById('new-name').value;
+        const price = parseInt(document.getElementById('new-price').value);
+        const discount = parseInt(document.getElementById('new-discount').value) || 0;
+        
+        if(name && price) {
+            products.push({ id: Date.now(), name, price, discount });
+            renderProducts();
+        }
+    }
+
+    function getLocation() {
+        const status = document.getElementById('map-status');
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((pos) => {
+                status.innerText = `Курьер в пути: Широта ${pos.coords.latitude.toFixed(4)}`;
+            }, () => {
+                status.innerText = "К сожалению, локация выключена";
+            });
+        }
+    }
+
+    function sendOrder() {
+        const addr = document.getElementById('address').value;
+        const pay = document.getElementById('payment-method').value;
+        if(!addr) return alert("Введите адрес!");
+        
+        alert(`Заказ принят!\nАдрес: ${addr}\nОплата: ${pay}\nСкоро буду на самокате!`);
+    }
+
+    renderProducts();
+</script>
+
+</body>
+</html>
