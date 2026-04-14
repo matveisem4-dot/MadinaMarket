@@ -63,9 +63,49 @@
         const p = document.getElementById('price').value;
         if (n && p) {
             db.products.push({ name: n, price: p });
-            sendUpdate(db);
+            async function sendUpdate(newData) {
+    const token = document.getElementById('token').value;
+    if (!token) return alert("Нужен токен!");
+
+    const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
+
+    try {
+        // 1. Прямо перед отправкой ВСЕГДА берем свежий SHA
+        const currentFile = await fetch(url, {
+            headers: { 'Authorization': `token ${token}` },
+            cache: "no-store" // Запрещаем браузеру брать старые данные из кэша
+        }).then(r => r.json());
+
+        if (!currentFile.sha) {
+            alert("Файл database.json не найден в репозитории!");
+            return;
         }
+
+        // 2. Отправляем обновление с актуальным SHA
+        const res = await fetch(url, {
+            method: 'PUT',
+            headers: { 
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify({
+                message: "admin update",
+                content: btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2)))),
+                sha: currentFile.sha // Используем самый свежий SHA
+            })
+        });
+
+        if (res.ok) {
+            alert("✅ Данные в MadinaMarket обновлены!");
+        } else {
+            const errData = await res.json();
+            alert("Ошибка GitHub: " + errData.message);
+        }
+    } catch (e) {
+        console.error(e);
+        alert("Произошла ошибка при связи с GitHub");
     }
+}
 </script>
 </body>
 </html>
