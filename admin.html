@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Daba Admin Panel</title>
+    <style>
+        body { font-family: sans-serif; background: #2c3e50; color: white; padding: 20px; }
+        .panel { max-width: 400px; margin: auto; background: #34495e; padding: 20px; border-radius: 10px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-bottom: 10px; }
+        .btn-toggle { background: #f1c40f; color: #2c3e50; }
+        .btn-add { background: #2ecc71; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="panel">
+    <h2>Управление магазином</h2>
+    <input type="password" id="token" placeholder="GitHub Token">
+    <hr>
+    <button class="btn-toggle" onclick="changeStatus()">ВКЛ / ВЫКЛ МАГАЗИН</button>
+    <hr>
+    <h4>Добавить товар</h4>
+    <input type="text" id="name" placeholder="Название (напр. Сладкая вата)">
+    <input type="number" id="price" placeholder="Цена (EGP)">
+    <button class="btn-add" onclick="addNew()">ДОБАВИТЬ В МЕНЮ</button>
+</div>
+
+<script>
+    const OWNER = 'ТВОЙ_ЛОГИН';
+    const REPO = 'ИМЯ_РЕПО';
+    const PATH = 'database.json';
+
+    async function sendUpdate(newData) {
+        const token = document.getElementById('token').value;
+        if (!token) return alert("Нужен токен!");
+
+        const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
+        const currentFile = await fetch(url).then(r => r.json());
+
+        const res = await fetch(url, {
+            method: 'PUT',
+            headers: { 'Authorization': `token ${token}` },
+            body: JSON.stringify({
+                message: "admin update",
+                content: btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2)))),
+                sha: currentFile.sha
+            })
+        });
+
+        if (res.ok) alert("Обновлено!"); else alert("Ошибка! Проверь токен.");
+    }
+
+    async function changeStatus() {
+        const db = await fetch(`https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${PATH}?t=${Date.now()}`).then(r => r.json());
+        db.isWorking = !db.isWorking;
+        sendUpdate(db);
+    }
+
+    async function addNew() {
+        const db = await fetch(`https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${PATH}?t=${Date.now()}`).then(r => r.json());
+        const n = document.getElementById('name').value;
+        const p = document.getElementById('price').value;
+        if (n && p) {
+            db.products.push({ name: n, price: p });
+            sendUpdate(db);
+        }
+    }
+</script>
+</body>
+</html>
