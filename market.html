@@ -3,55 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daba Delivery System</title>
+    <title>Daba Delivery — Вкусно и быстро!</title>
     <style>
-        :root { --p: #ff4757; --s: #2f3542; --bg: #f1f2f6; }
-        body { font-family: sans-serif; background: var(--bg); margin: 0; padding: 15px; }
-        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
-        .status { padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 15px; }
-        .open { background: #dff9fb; color: #0984e3; }
-        .closed { background: #fab1a0; color: #d63031; }
-        .product { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0; }
-        .btn { background: var(--p); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; }
-        .admin { margin-top: 30px; padding: 15px; border: 1px dashed #ccc; border-radius: 10px; background: #fafafa; }
-        input, select { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        .cart-badge { background: var(--p); color: white; padding: 2px 8px; border-radius: 10px; font-size: 12px; }
+        :root {
+            --mc-red: #DA291C;
+            --mc-yellow: #FFBC0D;
+            --mc-white: #FFFFFF;
+            --mc-bg: #F5F5F5;
+        }
+        body { font-family: 'Speedee', 'Arial', sans-serif; background: var(--mc-bg); margin: 0; padding: 0; color: #292929; }
+        
+        /* Шапка */
+        header { background: var(--mc-red); padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .logo { color: var(--mc-yellow); font-size: 28px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Баннер статуса */
+        #status-banner { padding: 10px; text-align: center; font-weight: bold; transition: 0.3s; }
+        .open { background: #FFBC0D; color: #292929; }
+        .closed { background: #292929; color: white; }
+
+        .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+
+        /* Карточка товара */
+        .product-card { background: white; border-radius: 15px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: flex; align-items: center; padding: 15px; }
+        .product-info { flex-grow: 1; }
+        .product-name { font-size: 18px; font-weight: bold; margin-bottom: 5px; }
+        .product-price { color: var(--mc-red); font-size: 20px; font-weight: 900; }
+        .add-btn { background: var(--mc-yellow); border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 24px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .add-btn:active { transform: scale(0.9); }
+
+        /* Форма заказа */
+        .order-panel { background: white; border-radius: 20px; padding: 20px; margin-top: 30px; border: 2px solid var(--mc-yellow); }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        .order-btn { background: var(--mc-red); color: white; border: none; width: 100%; padding: 15px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        
+        .footer { text-align: center; padding: 20px; font-size: 12px; color: #888; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>🚀 Доставка Эль-Даба <span id="cart-count" class="cart-badge">0</span></h2>
-    <div id="status-box" class="status">Загрузка...</div>
+<header>
+    <div class="logo">M Daba Delivery</div>
+</header>
 
-    <div id="menu-area"></div>
+<div id="status-banner" class="open">Загрузка системы...</div>
 
-    <div id="order-form" style="display:none; margin-top:20px;">
-        <hr>
-        <h4>Оформление</h4>
-        <input type="text" id="cust-addr" placeholder="Адрес (Дом, квартира)">
-        <select id="cust-pay">
-            <option value="Наличные">Наличные</option>
-            <option value="InstaPay">InstaPay</option>
-        </select>
-        <label><input type="checkbox" id="cust-door"> До двери</label>
-        <button class="btn" onclick="checkout()">Заказать</button>
-    </div>
-
-    <div class="admin">
-        <h4>🔐 Управление (Для тебя)</h4>
-        <input type="password" id="gh-token" placeholder="GitHub Token (Classic)">
-        <button onclick="toggleStore()" style="background:#2f3542; color:white; width:100%; border-radius:5px; padding:5px;">Вкл/Выкл Магазин</button>
-        <div style="margin-top:10px;">
-            <input type="text" id="p-name" placeholder="Название">
-            <input type="number" id="p-price" placeholder="Цена">
-            <button onclick="addNewProduct()" style="width:100%;">Добавить товар</button>
+<div class="container">
+    <div id="products-list">
         </div>
+
+    <div id="order-ui" style="display:none;" class="order-panel">
+        <h3 style="margin-top:0;">Ваш заказ</h3>
+        <div id="cart-items" style="font-size: 14px; margin-bottom: 10px; color: #555;">Корзина пуста</div>
+        <input type="text" id="cust-addr" placeholder="Куда доставить? (Дом, кв)">
+        <select id="cust-pay">
+            <option value="Наличные">Наличные курьеру</option>
+            <option value="InstaPay">Оплата через InstaPay</option>
+        </select>
+        <label style="font-size: 14px;"><input type="checkbox" id="cust-door"> Оставить у двери</label>
+        <button class="order-btn" onclick="sendToWhatsApp()">ЗАКАЗАТЬ</button>
     </div>
 </div>
 
+<div class="footer">© 2026 Daba Fast Food Delivery. Все права защищены.</div>
+
 <script>
-    // КОНФИГУР ПУТЬ
     const OWNER = 'matveisem4-dot'; 
     const REPO = 'MadinaMarket';
     const PATH = 'database.json';
@@ -59,97 +75,60 @@
     let db = { isWorking: true, products: [] };
     let cart = [];
 
-    // 1. ЗАГРУЗКА ИЗ GITHUB
-    async function loadDB() {
+    async function loadData() {
         try {
-            const r = await fetch(`https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${PATH}?nocache=${Date.now()}`);
+            const r = await fetch(`https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${PATH}?t=${Date.now()}`);
             db = await r.json();
             render();
-        } catch (e) { console.error("Ошибка загрузки"); }
+        } catch (e) { console.error("Ошибка сети"); }
     }
 
     function render() {
-        const statusBox = document.getElementById('status-box');
-        const menu = document.getElementById('menu-area');
-        const orderForm = document.getElementById('order-form');
+        const banner = document.getElementById('status-banner');
+        const list = document.getElementById('products-list');
+        const ui = document.getElementById('order-ui');
 
         if (!db.isWorking) {
-            statusBox.className = "status closed";
-            statusBox.innerText = "⚡ Самокат на зарядке. Зайдите через 2 часа";
-            menu.innerHTML = "";
-            orderForm.style.display = "none";
+            banner.className = "status-banner closed";
+            banner.innerText = "СЕЙЧАС ЗАКРЫТО (ЗАРЯЖАЕМ САМОКАТ)";
+            list.innerHTML = "<div style='text-align:center; padding:50px;'>Мы скоро вернемся! Зайдите через 2 часа.</div>";
+            ui.style.display = "none";
         } else {
-            statusBox.className = "status open";
-            statusBox.innerText = "✅ Магазин открыт!";
-            orderForm.style.display = "block";
-            menu.innerHTML = db.products.map((p, i) => `
-                <div class="product">
-                    <span>${p.name} - <b>${p.price} EGP</b></span>
-                    <button onclick="addToCart(${i})">+</button>
+            banner.className = "status-banner open";
+            banner.innerText = "МЫ ОТКРЫТЫ! БЫСТРАЯ ДОСТАВКА";
+            ui.style.display = "block";
+            list.innerHTML = db.products.map((p, i) => `
+                <div class="product-card">
+                    <div class="product-info">
+                        <div class="product-name">${p.name}</div>
+                        <div class="product-price">${p.price} EGP</div>
+                    </div>
+                    <button class="add-btn" onclick="addToCart(${i})">+</button>
                 </div>
             `).join('');
         }
-        document.getElementById('cart-count').innerText = cart.length;
     }
 
     function addToCart(i) {
         cart.push(db.products[i]);
-        render();
+        document.getElementById('cart-items').innerText = "Товаров в корзине: " + cart.length;
     }
 
-    // 2. СОХРАНЕНИЕ В GITHUB (API)
-    async function saveDB() {
-        const token = document.getElementById('gh-token').value;
-        if (!token) return alert("Введите токен!");
-
-        const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`;
-        
-        // Получаем SHA
-        const fileData = await fetch(url).then(r => r.json());
-        
-        const response = await fetch(url, {
-            method: 'PUT',
-            headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                message: "update db",
-                content: btoa(unescape(encodeURIComponent(JSON.stringify(db, null, 2)))),
-                sha: fileData.sha
-            })
-        });
-
-        if (response.ok) { alert("Успешно сохранено!"); loadDB(); }
-        else { alert("Ошибка! Проверь токен."); }
-    }
-
-    function toggleStore() {
-        db.isWorking = !db.isWorking;
-        saveDB();
-    }
-
-    function addNewProduct() {
-        const name = document.getElementById('p-name').value;
-        const price = document.getElementById('p-price').value;
-        if (name && price) {
-            db.products.push({ name, price: parseInt(price) });
-            saveDB();
-        }
-    }
-
-    function checkout() {
+    function sendToWhatsApp() {
         const addr = document.getElementById('cust-addr').value;
-        if (!addr || cart.length === 0) return alert("Корзина пуста или нет адреса!");
+        if (!addr || !cart.length) return alert("Добавьте товары и адрес!");
         
-        let text = `Заказ из Эль-Дабы!%0A%0A` + 
-                   cart.map(c => `- ${c.name}`).join('%0A') + 
-                   `%0A%0A📍 Адрес: ${addr}%0A💳 Оплата: ${document.getElementById('cust-pay').value}`;
+        let total = cart.reduce((s, p) => s + parseInt(p.price), 0);
+        let items = cart.map(p => `- ${p.name}`).join('%0A');
+        let msg = `🍔 НОВЫЙ ЗАКАЗ!%0A%0A${items}%0A%0A💰 ИТОГО: ${total} EGP%0A📍 АДРЕС: ${addr}%0A💳 ОПЛАТА: ${document.getElementById('cust-pay').value}`;
         
-        // Открываем WhatsApp (номер замени на свой)
-        window.open(`https://wa.me/201000000000?text=${text}`);
+        window.open(`https://wa.me/201000000000?text=${msg}`);
         cart = [];
         render();
     }
 
-    loadDB();
+    loadData();
+    setInterval(loadData, 30000); // Обновлять статус каждые 30 сек
 </script>
 </body>
 </html>
