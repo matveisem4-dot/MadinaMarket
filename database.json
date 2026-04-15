@@ -2,17 +2,9 @@
   "isWorking": true,
   "products": [
     {
-      "id": "1",
-      "name": "Fresh Tomatoes",
-      "price": 25.00,
-      "category": "Vegetables",
-      "description": "Fresh red tomatoes from local farm",
-      "image": ""
-    },
-    {
       "id": "2",
       "name": "Organic Eggs (12 pcs)",
-      "price": 45.00,
+      "price": 45,
       "category": "Dairy",
       "description": "Free-range organic eggs",
       "image": ""
@@ -20,7 +12,7 @@
     {
       "id": "3",
       "name": "Fresh Bread",
-      "price": 15.00,
+      "price": 15,
       "category": "Bakery",
       "description": "Freshly baked white bread",
       "image": ""
@@ -28,7 +20,7 @@
     {
       "id": "4",
       "name": "Apples (1kg)",
-      "price": 35.00,
+      "price": 35,
       "category": "Fruits",
       "description": "Sweet red apples",
       "image": ""
@@ -36,7 +28,7 @@
     {
       "id": "5",
       "name": "Milk (1L)",
-      "price": 20.00,
+      "price": 20,
       "category": "Dairy",
       "description": "Fresh whole milk",
       "image": ""
@@ -44,7 +36,7 @@
     {
       "id": "6",
       "name": "Chicken (1kg)",
-      "price": 120.00,
+      "price": 120,
       "category": "Meat",
       "description": "Fresh chicken breast",
       "image": ""
