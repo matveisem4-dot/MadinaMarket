@@ -208,10 +208,6 @@
                     </div>
                     <p class="text-sm text-gray-500">Payment will be collected upon delivery</p>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">GitHub Token</label>
-                    <input type="password" id="githubToken" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter GitHub token">
-                </div>
                 <button type="submit" class="w-full py-4 gradient-bg text-white font-semibold rounded-xl hover:opacity-90 transition-opacity">
                     Place Order
                 </button>
@@ -524,15 +520,9 @@
             }, 3000);
         }
 
-        // Order Submission
+        // Order Submission - Using GitHub Issues (no token needed for public repos!)
         document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-
-            const token = document.getElementById('githubToken').value.trim();
-            if (!token) {
-                showToast('Please enter GitHub token');
-                return;
-            }
 
             const order = {
                 id: Date.now().toString(),
@@ -558,14 +548,50 @@
             try {
                 showToast('Submitting order...');
 
-                // Get current orders with SHA
-                const { content: currentOrders, sha } = await getFileWithSha(CONFIG.ordersPath);
+                // Create GitHub Issue with order data
+                const issueUrl = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/issues`;
+                const issueBody = `
+## 🛒 Order #${order.id}
 
-                // Add new order
-                const updatedOrders = [...currentOrders, order];
+### 👤 Customer Information
+- **Name:** ${order.customer.name}
+- **Phone:** ${order.customer.phone}
+- **Address:** ${order.customer.address}
 
-                // Update file
-                await updateFile(CONFIG.ordersPath, updatedOrders, sha, token);
+### 🚚 Delivery Instructions
+${order.delivery.leaveAtDoor ? '🔑 **Leave at door**' : '🚪 **Hand delivery required**'}
+
+### 📦 Order Items
+${order.items.map(item => `- ${item.name} x${item.quantity} = EGP ${(item.price * item.quantity).toFixed(2)}`).join('\n')}
+
+### 💰 Total
+**EGP ${order.total.toFixed(2)}**
+
+---
+*Order placed: ${new Date(order.timestamp).toLocaleString()}*
+*Status: ${order.status}*
+
+\`\`\`json
+${JSON.stringify(order, null, 2)}
+\`\`\`
+`;
+
+                const response = await fetch(issueUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: `🛒 Order #${order.id.slice(-6)} - ${order.customer.name}`,
+                        body: issueBody,
+                        labels: ['order', 'pending']
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Failed to create order');
+                }
 
                 // Success
                 cart = [];
@@ -576,11 +602,7 @@
 
             } catch (error) {
                 console.error('Order submission error:', error);
-                if (error.message.includes('409')) {
-                    showToast('Conflict detected. Please try again.');
-                } else {
-                    showToast('Failed to submit order: ' + error.message);
-                }
+                showToast('Failed to submit order: ' + error.message);
             }
         });
 
