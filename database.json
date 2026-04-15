@@ -2,14 +2,6 @@
   "isWorking": true,
   "products": [
     {
-      "id": "4",
-      "name": "Apples (1kg)",
-      "price": 35,
-      "category": "Fruits",
-      "description": "Sweet red apples",
-      "image": ""
-    },
-    {
       "id": "5",
       "name": "Milk (1L)",
       "price": 20,
