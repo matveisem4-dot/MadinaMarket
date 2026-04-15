@@ -1,13 +1,4 @@
 {
   "isWorking": true,
-  "products": [
-    {
-      "id": "1776284563758",
-      "name": "какшка",
-      "price": 100,
-      "category": "хуй",
-      "description": "пгп",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3DRPxLp5XH4U1fUPLQwkWQn7fUd368gb2lUCx9qEKuUb5LhktbVpEcMTg_3EP_rx99pWkU_cdJ_ZETZlfswgCjwu5DhipxhHqNXYkPJ0&s=10"
-    }
-  ]
+  "products": []
 }
