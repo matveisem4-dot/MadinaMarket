@@ -1,13 +1,4 @@
 {
   "isWorking": true,
-  "products": [
-    {
-      "id": "6",
-      "name": "Chicken (1kg)",
-      "price": 120,
-      "category": "Meat",
-      "description": "Fresh chicken breast",
-      "image": ""
-    }
-  ]
+  "products": []
 }
