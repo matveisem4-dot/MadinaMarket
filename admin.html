@@ -71,22 +71,29 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- GitHub Token Section -->
-        <section class="mb-8">
+        <!-- Configuration Section -->
+        <section class="mb-8" id="configSection">
             <div class="card-gradient rounded-2xl p-6 border border-slate-700/50 glow-border">
                 <div class="flex items-start gap-4">
                     <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <svg class="w-6 h-6 text-indigo-400" fill="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-green-400" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                         </svg>
                     </div>
                     <div class="flex-1">
-                        <h3 class="text-lg font-semibold mb-2">GitHub Authentication</h3>
-                        <p class="text-slate-400 text-sm mb-4">Enter your GitHub Personal Access Token to manage the store. The token will be stored locally in your browser.</p>
-                        <div class="flex gap-3">
-                            <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxx" class="flex-1 px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent font-mono text-sm">
-                            <button onclick="saveToken()" class="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl font-medium hover:opacity-90 transition-opacity">
-                                Connect
+                        <h3 class="text-lg font-semibold mb-2">🔧 Настройки (введите один раз)</h3>
+                        <p class="text-slate-400 text-sm mb-4">Настройте один раз - курьер будет видеть заказы автоматически!</p>
+
+                        <div class="space-y-4">
+                            <!-- GitHub Token -->
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">🐙 GitHub Token - <span class="text-green-400">ОБЯЗАТЕЛЬНО</span></label>
+                                <p class="text-xs text-slate-500 mb-2">Нужен для чтения заказов и управления товарами. Создайте на <a href="https://github.com/settings/tokens" target="_blank" class="text-indigo-400 hover:underline">github.com/settings/tokens</a></p>
+                                <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxx" class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm">
+                            </div>
+
+                            <button onclick="saveToken()" class="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl font-medium hover:opacity-90 transition-opacity">
+                                💾 Сохранить и подключиться
                             </button>
                         </div>
                     </div>
@@ -378,20 +385,24 @@
             document.querySelector(`[data-tab="${tabName}"]`).classList.add('active', 'bg-indigo-500');
         }
 
-        // Token Management
+        // Configuration Management
         function saveToken() {
-            const tokenInput = document.getElementById('githubToken');
-            const token = tokenInput.value.trim();
+            const token = document.getElementById('githubToken').value.trim();
 
             if (!token) {
-                showToast('Please enter a GitHub token', 'error');
+                showToast('Введите GitHub Token!', 'error');
                 return;
             }
 
             githubToken = token;
             localStorage.setItem('madina_github_token', token);
-            tokenInput.value = '';
 
+            showToast('Настройки сохранены! Загружаем данные...', 'success');
+
+            // Hide config section after successful save
+            document.getElementById('configSection').style.display = 'none';
+
+            // Load data
             loadData();
         }
 
@@ -409,13 +420,12 @@
                 products = data.products || [];
                 isWorking = data.isWorking !== false;
 
-                orders = await fetchFile(CONFIG.ordersPath, githubToken);
-                if (!Array.isArray(orders)) orders = [];
-
                 updateConnectionStatus(true);
                 renderProducts();
-                renderOrders();
                 updateStoreStatusUI();
+
+                // Load orders from GitHub Issues
+                await loadOrdersFromIssues();
 
                 showToast('Connected successfully!', 'success');
             } catch (error) {
@@ -424,6 +434,60 @@
                 showToast('Failed to load data: ' + error.message, 'error');
             } finally {
                 hideLoading();
+            }
+        }
+
+        async function loadOrdersFromIssues() {
+            try {
+                const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/issues?labels=order&state=all&sort=created&direction=desc`;
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `token ${githubToken}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load orders');
+                }
+
+                const issues = await response.json();
+
+                // Parse issues to order format
+                orders = issues.map(issue => {
+                    // Try to extract JSON from issue body
+                    const jsonMatch = issue.body.match(/```json\n([\s\S]*?)\n```/);
+                    let orderData = {};
+
+                    if (jsonMatch) {
+                        try {
+                            orderData = JSON.parse(jsonMatch[1]);
+                        } catch (e) {
+                            console.error('Failed to parse order JSON:', e);
+                        }
+                    }
+
+                    return {
+                        id: issue.number.toString(),
+                        issueId: issue.id,
+                        title: issue.title,
+                        body: issue.body,
+                        customer: orderData.customer || {},
+                        delivery: orderData.delivery || {},
+                        items: orderData.items || [],
+                        total: orderData.total || 0,
+                        status: orderData.status || 'pending',
+                        timestamp: orderData.timestamp || issue.created_at,
+                        state: issue.state, // open/closed
+                        labels: issue.labels.map(l => l.name)
+                    };
+                });
+
+                renderOrders();
+            } catch (error) {
+                console.error('Load orders error:', error);
+                showToast('Failed to load orders: ' + error.message, 'error');
+                orders = [];
+                renderOrders();
             }
         }
 
@@ -642,9 +706,7 @@
 
             try {
                 showLoading('Refreshing orders...');
-                orders = await fetchFile(CONFIG.ordersPath, githubToken);
-                if (!Array.isArray(orders)) orders = [];
-                renderOrders();
+                await loadOrdersFromIssues();
                 showToast('Orders refreshed!', 'success');
             } catch (error) {
                 console.error('Refresh orders error:', error);
@@ -661,24 +723,38 @@
             }
 
             try {
-                // Find and update order
-                const orderIndex = orders.findIndex(o => o.id === orderId);
-                if (orderIndex === -1) return;
+                // Find order
+                const order = orders.find(o => o.id === orderId);
+                if (!order) return;
 
-                orders[orderIndex].status = newStatus;
+                // Update labels based on status
+                const labels = ['order', newStatus];
 
-                // Get latest SHA
-                const { sha } = await getFileWithSha(CONFIG.ordersPath, githubToken);
+                // Update GitHub Issue labels
+                const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/issues/${order.issueId}/labels`;
+                const response = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${githubToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ labels })
+                });
 
-                // Update orders
-                await updateFile(CONFIG.ordersPath, orders, sha, githubToken, `Update order ${orderId} status`);
+                if (!response.ok) {
+                    throw new Error('Failed to update order status');
+                }
+
+                // Update local order status
+                order.status = newStatus;
+                renderOrders();
 
                 showToast('Order status updated!', 'success');
             } catch (error) {
                 console.error('Update order status error:', error);
                 showToast('Failed to update status: ' + error.message, 'error');
                 // Revert on error
-                renderOrders();
+                await loadOrdersFromIssues();
             }
         }
 
@@ -688,24 +764,32 @@
                 return;
             }
 
-            if (!confirm('Are you sure you want to delete ALL orders? This cannot be undone!')) return;
+            if (!confirm('Are you sure you want to close ALL order issues? This cannot be undone!')) return;
 
             try {
-                showLoading('Clearing orders...');
+                showLoading('Closing all orders...');
 
-                // Get latest SHA
-                const { sha } = await getFileWithSha(CONFIG.ordersPath, githubToken);
+                // Close all open order issues
+                for (const order of orders) {
+                    if (order.state === 'open') {
+                        const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/issues/${order.issueId}`;
+                        await fetch(url, {
+                            method: 'PATCH',
+                            headers: {
+                                'Authorization': `token ${githubToken}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ state: 'closed' })
+                        });
+                    }
+                }
 
-                // Clear orders
-                await updateFile(CONFIG.ordersPath, [], sha, githubToken, 'Clear all orders');
+                await loadOrdersFromIssues();
 
-                orders = [];
-                renderOrders();
-
-                showToast('All orders cleared!', 'success');
+                showToast('All orders closed!', 'success');
             } catch (error) {
-                console.error('Clear orders error:', error);
-                showToast('Failed to clear orders: ' + error.message, 'error');
+                console.error('Close orders error:', error);
+                showToast('Failed to close orders: ' + error.message, 'error');
             } finally {
                 hideLoading();
             }
@@ -764,6 +848,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Load saved token
             if (githubToken) {
+                document.getElementById('configSection').style.display = 'none';
                 loadData();
             }
 
