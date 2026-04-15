@@ -2,14 +2,6 @@
   "isWorking": true,
   "products": [
     {
-      "id": "5",
-      "name": "Milk (1L)",
-      "price": 20,
-      "category": "Dairy",
-      "description": "Fresh whole milk",
-      "image": ""
-    },
-    {
       "id": "6",
       "name": "Chicken (1kg)",
       "price": 120,
