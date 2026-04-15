@@ -2,14 +2,6 @@
   "isWorking": true,
   "products": [
     {
-      "id": "3",
-      "name": "Fresh Bread",
-      "price": 15,
-      "category": "Bakery",
-      "description": "Freshly baked white bread",
-      "image": ""
-    },
-    {
       "id": "4",
       "name": "Apples (1kg)",
       "price": 35,
