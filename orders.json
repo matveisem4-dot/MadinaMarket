@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "id": "1776268018287",
+    "customer": {
+      "name": "d",
+      "phone": "d",
+      "address": "d"
+    },
+    "delivery": {
+      "leaveAtDoor": true
+    },
+    "items": [
+      {
+        "id": "1776266541910",
+        "name": "какшка",
+        "price": 10,
+        "quantity": 1
+      }
+    ],
+    "total": 10,
+    "status": "pending",
+    "timestamp": "2026-04-15T15:46:58.287Z"
+  }
+]
