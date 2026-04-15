@@ -2,14 +2,6 @@
   "isWorking": true,
   "products": [
     {
-      "id": "2",
-      "name": "Organic Eggs (12 pcs)",
-      "price": 45,
-      "category": "Dairy",
-      "description": "Free-range organic eggs",
-      "image": ""
-    },
-    {
       "id": "3",
       "name": "Fresh Bread",
       "price": 15,
