@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Madina Market - Admin Dashboard</title>
+    <title>Madina Market - Панель Курьера</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
@@ -57,13 +57,7 @@
                     </div>
                     <div>
                         <h1 class="text-xl font-bold">Madina Market</h1>
-                        <p class="text-xs text-slate-400">Admin Dashboard</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div id="connectionStatus" class="flex items-center gap-2 px-3 py-1.5 bg-slate-800 rounded-lg text-sm">
-                        <span class="w-2 h-2 rounded-full bg-yellow-500" id="statusDot"></span>
-                        <span id="statusText">Not Connected</span>
+                        <p class="text-xs text-slate-400">Панель Курьера</p>
                     </div>
                 </div>
             </div>
@@ -76,8 +70,8 @@
             <div class="card-gradient rounded-2xl p-6 border border-slate-700/50 glow-border">
                 <div class="flex items-start gap-4">
                     <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <svg class="w-6 h-6 text-orange-400" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-3.5 3.5c-.37.37-.59.88-.59-1.41V6.5c0-.55-.45-1-1-1z"/>
+                        <svg class="w-6 h-6 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                         </svg>
                     </div>
                     <div class="flex-1">
@@ -85,21 +79,14 @@
                         <p class="text-slate-400 text-sm mb-4">Настройте один раз - курьер будет видеть заказы автоматически!</p>
 
                         <div class="space-y-4">
-                            <!-- Firebase Database URL -->
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">🔥 Firebase Database URL - <span class="text-orange-400">ОБЯЗАТЕЛЬНО</span></label>
-                                <p class="text-xs text-slate-500 mb-2">Создайте бесплатный проект на <a href="https://console.firebase.google.com" target="_blank" class="text-indigo-400 hover:underline">console.firebase.google.com</a> и скопируйте Database URL</p>
-                                <input type="text" id="firebaseUrl" placeholder="https://your-project.firebaseio.com" class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent font-mono text-sm">
-                            </div>
-
                             <!-- GitHub Token -->
                             <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">🐙 GitHub Token - <span class="text-green-400">для товаров</span></label>
-                                <p class="text-xs text-slate-500 mb-2">Нужен только для управления товарами. Создайте на <a href="https://github.com/settings/tokens" target="_blank" class="text-indigo-400 hover:underline">github.com/settings/tokens</a></p>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">🐙 GitHub Token - <span class="text-green-400">ОБЯЗАТЕЛЬНО</span></label>
+                                <p class="text-xs text-slate-500 mb-2">Нужен для чтения заказов и управления товарами. Создайте на <a href="https://github.com/settings/tokens" target="_blank" class="text-indigo-400 hover:underline">github.com/settings/tokens</a></p>
                                 <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxx" class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm">
                             </div>
 
-                            <button onclick="saveAllConfig()" class="w-full py-3 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl font-medium hover:opacity-90 transition-opacity">
+                            <button onclick="saveToken()" class="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl font-medium hover:opacity-90 transition-opacity">
                                 💾 Сохранить и подключиться
                             </button>
                         </div>
@@ -110,79 +97,24 @@
 
         <!-- Dashboard Tabs -->
         <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
-            <button onclick="showTab('products')" class="tab-btn active px-6 py-3 rounded-xl font-medium transition-all" data-tab="products">
-                Products
+            <button onclick="showTab('orders')" class="tab-btn active px-6 py-3 rounded-xl font-medium transition-all" data-tab="orders">
+                📦 Заказы
             </button>
-            <button onclick="showTab('orders')" class="tab-btn px-6 py-3 rounded-xl font-medium transition-all" data-tab="orders">
-                Orders
+            <button onclick="showTab('products')" class="tab-btn px-6 py-3 rounded-xl font-medium transition-all" data-tab="products">
+                🛍️ Товары
             </button>
             <button onclick="showTab('settings')" class="tab-btn px-6 py-3 rounded-xl font-medium transition-all" data-tab="settings">
-                Settings
+                ⚙️ Настройки
             </button>
-        </div>
-
-        <!-- Products Tab -->
-        <div id="productsTab" class="tab-content">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Add Product Form -->
-                <div class="lg:col-span-1">
-                    <div class="card-gradient rounded-2xl p-6 border border-slate-700/50">
-                        <h3 class="text-lg font-semibold mb-4">Add New Product</h3>
-                        <form id="addProductForm" class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Product Name *</label>
-                                <input type="text" id="productName" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Price (EGP) *</label>
-                                <input type="number" id="productPrice" step="0.01" required class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Category</label>
-                                <input type="text" id="productCategory" class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="e.g., Vegetables, Fruits">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Description</label>
-                                <textarea id="productDescription" rows="3" class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"></textarea>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Image URL</label>
-                                <input type="url" id="productImage" class="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="https://...">
-                            </div>
-                            <button type="submit" class="w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl font-medium hover:opacity-90 transition-opacity">
-                                Add Product
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                
-                <!-- Products List -->
-                <div class="lg:col-span-2">
-                    <div class="card-gradient rounded-2xl p-6 border border-slate-700/50">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold">Products List</h3>
-                            <span id="productCount" class="px-3 py-1 bg-slate-800 rounded-lg text-sm text-slate-400">0 products</span>
-                        </div>
-                        <div id="productsList" class="space-y-3 max-h-[600px] overflow-y-auto scrollbar-thin">
-                            <div class="text-center py-12 text-slate-500">
-                                <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                                </svg>
-                                <p>Connect to GitHub to view products</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Orders Tab -->
-        <div id="ordersTab" class="tab-content hidden">
+        <div id="ordersTab" class="tab-content">
             <div class="card-gradient rounded-2xl p-6 border border-slate-700/50">
                 <div class="flex justify-between items-center mb-6">
                     <div>
-                        <h3 class="text-lg font-semibold">Orders</h3>
-                        <p class="text-slate-400 text-sm">Manage incoming orders</p>
+                        <h3 class="text-lg font-semibold">📦 Заказы</h3>
+                        <p class="text-slate-400 text-sm">Управляйте входящими заказами</p>
                     </div>
                     <div class="flex gap-3">
                         <button onclick="refreshOrders()" class="px-4 py-2 bg-slate-800 rounded-xl text-sm font-medium hover:bg-slate-700 transition-colors">
@@ -190,15 +122,7 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                                 </svg>
-                                Refresh
-                            </span>
-                        </button>
-                        <button onclick="clearAllOrders()" class="px-4 py-2 bg-red-500/20 text-red-400 rounded-xl text-sm font-medium hover:bg-red-500/30 transition-colors">
-                            <span class="flex items-center gap-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                </svg>
-                                Clear All
+                                Обновить
                             </span>
                         </button>
                     </div>
@@ -208,7 +132,25 @@
                         <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                         </svg>
-                        <p>Connect to GitHub to view orders</p>
+                        <p>Подключитесь к GitHub для просмотра заказов</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Tab -->
+        <div id="productsTab" class="tab-content hidden">
+            <div class="card-gradient rounded-2xl p-6 border border-slate-700/50">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold">🛍️ Товары</h3>
+                    <span id="productCount" class="px-3 py-1 bg-slate-800 rounded-lg text-sm text-slate-400">0 товаров</span>
+                </div>
+                <div id="productsList" class="space-y-3 max-h-[600px] overflow-y-auto scrollbar-thin">
+                    <div class="text-center py-12 text-slate-500">
+                        <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                        <p>Подключитесь к GitHub для просмотра товаров</p>
                     </div>
                 </div>
             </div>
@@ -217,38 +159,38 @@
         <!-- Settings Tab -->
         <div id="settingsTab" class="tab-content hidden">
             <div class="card-gradient rounded-2xl p-6 border border-slate-700/50">
-                <h3 class="text-lg font-semibold mb-6">Store Settings</h3>
+                <h3 class="text-lg font-semibold mb-6">⚙️ Настройки Магазина</h3>
                 <div class="space-y-6">
                     <!-- Store Status Toggle -->
                     <div class="flex items-center justify-between p-4 bg-slate-800/50 rounded-xl">
                         <div>
-                            <h4 class="font-medium">Store Status</h4>
-                            <p class="text-slate-400 text-sm">Control whether customers can place orders</p>
+                            <h4 class="font-medium">Статус Магазина</h4>
+                            <p class="text-slate-400 text-sm">Управляйте приёмом заказов</p>
                         </div>
                         <button id="storeStatusToggle" onclick="toggleStoreStatus()" class="status-toggle inactive px-6 py-3 rounded-xl font-medium transition-all">
-                            <span id="storeStatusText">Closed</span>
+                            <span id="storeStatusText">Закрыт</span>
                         </button>
                     </div>
                     
                     <!-- Repository Info -->
                     <div class="p-4 bg-slate-800/50 rounded-xl">
-                        <h4 class="font-medium mb-3">Repository Information</h4>
+                        <h4 class="font-medium mb-3">Информация о Репозитории</h4>
                         <div class="space-y-2 text-sm">
                             <div class="flex justify-between">
-                                <span class="text-slate-400">Owner</span>
+                                <span class="text-slate-400">Владелец</span>
                                 <span class="font-mono text-indigo-400">matveisem4-dot</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-slate-400">Repository</span>
+                                <span class="text-slate-400">Репозиторий</span>
                                 <span class="font-mono text-indigo-400">MadinaMarket</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-slate-400">Database File</span>
+                                <span class="text-slate-400">Файл базы данных</span>
                                 <span class="font-mono text-indigo-400">database.json</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-slate-400">Orders File</span>
-                                <span class="font-mono text-indigo-400">orders.json</span>
+                                <span class="text-slate-400">Заказы</span>
+                                <span class="font-mono text-indigo-400">GitHub Issues</span>
                             </div>
                         </div>
                     </div>
@@ -266,7 +208,7 @@
     <div id="loadingOverlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center">
         <div class="card-gradient rounded-2xl p-8 text-center">
             <div class="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p id="loadingText" class="text-slate-300">Loading...</p>
+            <p id="loadingText" class="text-slate-300">Загрузка...</p>
         </div>
     </div>
 
@@ -275,9 +217,7 @@
         const CONFIG = {
             owner: 'matveisem4-dot',
             repo: 'MadinaMarket',
-            databasePath: 'database.json',
-            ordersPath: 'orders.json',
-            firebaseUrl: localStorage.getItem('madina_firebase_url') || 'https://YOUR-FIREBASE.firebaseio.com'
+            databasePath: 'database.json'
         };
 
         // State
@@ -343,7 +283,7 @@
         }
 
         // UI Functions
-        function showLoading(text = 'Loading...') {
+        function showLoading(text = 'Загрузка...') {
             document.getElementById('loadingText').textContent = text;
             document.getElementById('loadingOverlay').classList.remove('hidden');
         }
@@ -370,21 +310,6 @@
             }, 3000);
         }
 
-        function updateConnectionStatus(connected) {
-            const statusDot = document.getElementById('statusDot');
-            const statusText = document.getElementById('statusText');
-
-            if (connected) {
-                statusDot.classList.remove('bg-yellow-500');
-                statusDot.classList.add('bg-green-500');
-                statusText.textContent = 'Connected';
-            } else {
-                statusDot.classList.remove('bg-green-500');
-                statusDot.classList.add('bg-yellow-500');
-                statusText.textContent = 'Not Connected';
-            }
-        }
-
         function showTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active', 'bg-indigo-500'));
@@ -393,25 +318,19 @@
             document.querySelector(`[data-tab="${tabName}"]`).classList.add('active', 'bg-indigo-500');
         }
 
-        // Configuration Management
-        function saveAllConfig() {
-            const firebaseUrl = document.getElementById('firebaseUrl').value.trim();
-            const token = document.getElementById('githubToken').value.trim();
+        // Token Management
+        function saveToken() {
+            const tokenInput = document.getElementById('githubToken');
+            const token = tokenInput.value.trim();
 
-            if (!firebaseUrl) {
-                showToast('Введите Firebase Database URL!', 'error');
+            if (!token) {
+                showToast('Введите GitHub Token!', 'error');
                 return;
             }
 
-            // Save Firebase config
-            CONFIG.firebaseUrl = firebaseUrl;
-            localStorage.setItem('madina_firebase_url', firebaseUrl);
-
-            // Save GitHub token (optional)
-            if (token) {
-                githubToken = token;
-                localStorage.setItem('madina_github_token', token);
-            }
+            githubToken = token;
+            localStorage.setItem('madina_github_token', token);
+            tokenInput.value = '';
 
             showToast('Настройки сохранены! Загружаем данные...', 'success');
 
@@ -424,50 +343,82 @@
 
         // Load Data
         async function loadData() {
+            if (!githubToken) {
+                return;
+            }
+
             try {
-                showLoading('Loading data...');
+                showLoading('Загрузка данных...');
 
-                // Load products from GitHub
-                if (githubToken) {
-                    const data = await fetchFile(CONFIG.databasePath, githubToken);
-                    products = data.products || [];
-                    isWorking = data.isWorking !== false;
-                    renderProducts();
-                    updateStoreStatusUI();
-                }
+                // Load products
+                const data = await fetchFile(CONFIG.databasePath, githubToken);
+                products = data.products || [];
+                isWorking = data.isWorking !== false;
 
-                // Load orders from Firebase
-                await loadOrdersFromFirebase();
+                renderProducts();
+                updateStoreStatusUI();
 
-                updateConnectionStatus(true);
-                showToast('Connected successfully!', 'success');
+                // Load orders from GitHub Issues
+                await loadOrdersFromIssues();
+
+                showToast('Подключено успешно!', 'success');
             } catch (error) {
                 console.error('Load error:', error);
-                updateConnectionStatus(false);
-                showToast('Failed to load data: ' + error.message, 'error');
+                showToast('Ошибка загрузки данных: ' + error.message, 'error');
             } finally {
                 hideLoading();
             }
         }
 
-        async function loadOrdersFromFirebase() {
+        async function loadOrdersFromIssues() {
             try {
-                const url = `${CONFIG.firebaseUrl}/orders.json`;
-                const response = await fetch(url);
+                const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/issues?labels=order&state=all&sort=created&direction=desc`;
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `token ${githubToken}`
+                    }
+                });
 
                 if (!response.ok) {
                     throw new Error('Failed to load orders');
                 }
 
-                const data = await response.json();
+                const issues = await response.json();
 
-                // Convert Firebase object to array
-                orders = data ? Object.values(data).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) : [];
+                // Parse issues to order format
+                orders = issues.map(issue => {
+                    // Try to extract JSON from issue body
+                    const jsonMatch = issue.body.match(/```json\n([\s\S]*?)\n```/);
+                    let orderData = {};
+
+                    if (jsonMatch) {
+                        try {
+                            orderData = JSON.parse(jsonMatch[1]);
+                        } catch (e) {
+                            console.error('Failed to parse order JSON:', e);
+                        }
+                    }
+
+                    return {
+                        id: issue.number.toString(),
+                        issueId: issue.id,
+                        title: issue.title,
+                        body: issue.body,
+                        customer: orderData.customer || {},
+                        delivery: orderData.delivery || {},
+                        items: orderData.items || [],
+                        total: orderData.total || 0,
+                        status: orderData.status || 'pending',
+                        timestamp: orderData.timestamp || issue.created_at,
+                        state: issue.state, // open/closed
+                        labels: issue.labels.map(l => l.name)
+                    };
+                });
 
                 renderOrders();
             } catch (error) {
                 console.error('Load orders error:', error);
-                showToast('Failed to load orders: ' + error.message, 'error');
+                showToast('Ошибка загрузки заказов: ' + error.message, 'error');
                 orders = [];
                 renderOrders();
             }
@@ -477,21 +428,21 @@
         function renderProducts() {
             const list = document.getElementById('productsList');
             const count = document.getElementById('productCount');
-            
-            count.textContent = `${products.length} products`;
-            
+
+            count.textContent = `${products.length} товаров`;
+
             if (products.length === 0) {
                 list.innerHTML = `
                     <div class="text-center py-12 text-slate-500">
                         <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
-                        <p>No products yet</p>
+                        <p>Нет товаров</p>
                     </div>
                 `;
                 return;
             }
-            
+
             list.innerHTML = products.map(product => `
                 <div class="flex items-center gap-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700/50 hover:border-slate-600 transition-colors">
                     <div class="w-16 h-16 bg-slate-700 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
@@ -512,142 +463,8 @@
                         <p class="text-indigo-400 font-semibold">EGP ${product.price.toFixed(2)}</p>
                         ${product.category ? `<span class="text-xs text-slate-400">${product.category}</span>` : ''}
                     </div>
-                    <button onclick="deleteProduct('${product.id}')" class="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/20 rounded-lg transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                    </button>
                 </div>
             `).join('');
-        }
-
-        async function addProduct(e) {
-            e.preventDefault();
-
-            if (!githubToken) {
-                showToast('Please connect to GitHub first', 'error');
-                return;
-            }
-
-            const newProduct = {
-                id: Date.now().toString(),
-                name: document.getElementById('productName').value,
-                price: parseFloat(document.getElementById('productPrice').value),
-                category: document.getElementById('productCategory').value || null,
-                description: document.getElementById('productDescription').value || null,
-                image: document.getElementById('productImage').value || null
-            };
-
-            let retries = 3;
-            while (retries > 0) {
-                try {
-                    showLoading('Adding product...');
-
-                    // Get latest SHA and data
-                    const { content: data, sha } = await getFileWithSha(CONFIG.databasePath, githubToken);
-
-                    // Add product
-                    data.products = data.products || [];
-                    data.products.push(newProduct);
-
-                    // Update
-                    await updateFile(CONFIG.databasePath, data, sha, githubToken, 'Add new product');
-
-                    products = data.products;
-                    renderProducts();
-
-                    // Reset form
-                    document.getElementById('addProductForm').reset();
-
-                    showToast('Product added successfully!', 'success');
-                    hideLoading();
-                    return; // Success, exit loop
-                } catch (error) {
-                    console.error('Add product error:', error);
-
-                    if (error.message.includes('does not match') || error.message.includes('409')) {
-                        retries--;
-                        if (retries > 0) {
-                            console.log(`Conflict detected. Reloading data and retrying... (${retries} attempts left)`);
-                            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
-
-                            // Reload products data to get fresh state
-                            try {
-                                const freshData = await fetchFile(CONFIG.databasePath, githubToken);
-                                products = freshData.products || [];
-                                isWorking = freshData.isWorking !== false;
-                                renderProducts();
-                            } catch (loadError) {
-                                console.error('Failed to reload data:', loadError);
-                            }
-
-                            continue; // Retry with fresh data
-                        }
-                    }
-
-                    showToast('Failed to add product: ' + error.message, 'error');
-                    hideLoading();
-                    return;
-                }
-            }
-        }
-
-        async function deleteProduct(productId) {
-            if (!githubToken) {
-                showToast('Please connect to GitHub first', 'error');
-                return;
-            }
-
-            if (!confirm('Are you sure you want to delete this product?')) return;
-
-            let retries = 3;
-            while (retries > 0) {
-                try {
-                    showLoading('Deleting product...');
-
-                    // Get latest SHA and data
-                    const { content: data, sha } = await getFileWithSha(CONFIG.databasePath, githubToken);
-
-                    // Remove product
-                    data.products = data.products.filter(p => p.id !== productId);
-
-                    // Update
-                    await updateFile(CONFIG.databasePath, data, sha, githubToken, 'Delete product');
-
-                    products = data.products;
-                    renderProducts();
-
-                    showToast('Product deleted successfully!', 'success');
-                    hideLoading();
-                    return; // Success, exit loop
-                } catch (error) {
-                    console.error('Delete product error:', error);
-
-                    if (error.message.includes('does not match') || error.message.includes('409')) {
-                        retries--;
-                        if (retries > 0) {
-                            console.log(`Conflict detected. Reloading data and retrying... (${retries} attempts left)`);
-                            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
-
-                            // Reload products data to get fresh state
-                            try {
-                                const freshData = await fetchFile(CONFIG.databasePath, githubToken);
-                                products = freshData.products || [];
-                                isWorking = freshData.isWorking !== false;
-                                renderProducts();
-                            } catch (loadError) {
-                                console.error('Failed to reload data:', loadError);
-                            }
-
-                            continue; // Retry with fresh data
-                        }
-                    }
-
-                    showToast('Failed to delete product: ' + error.message, 'error');
-                    hideLoading();
-                    return;
-                }
-            }
         }
 
         // Orders Management
@@ -660,7 +477,7 @@
                         <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                         </svg>
-                        <p>No orders yet</p>
+                        <p>Нет заказов</p>
                     </div>
                 `;
                 return;
@@ -670,20 +487,23 @@
             const sortedOrders = [...orders].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
             list.innerHTML = sortedOrders.map(order => `
-                <div class="bg-slate-800/50 rounded-xl border border-slate-700/50 overflow-hidden">
+                <div class="bg-slate-800/50 rounded-xl border border-slate-700/50 overflow-hidden ${order.state === 'closed' ? 'opacity-50' : ''}">
                     <div class="p-4 border-b border-slate-700/50 flex justify-between items-start">
                         <div>
                             <div class="flex items-center gap-2 mb-1">
                                 <span class="font-mono text-sm text-indigo-400">#${order.id?.slice(-6) || 'N/A'}</span>
-                                <select onchange="updateOrderStatus('${order.id}', this.value)" class="px-2 py-0.5 text-xs rounded-full bg-slate-700 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>⏳ Pending</option>
-                                    <option value="preparing" ${order.status === 'preparing' ? 'selected' : ''}>👨‍🍳 Preparing</option>
-                                    <option value="delivering" ${order.status === 'delivering' ? 'selected' : ''}>🚚 Delivering</option>
-                                    <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>✅ Delivered</option>
-                                    <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>❌ Cancelled</option>
-                                </select>
+                                ${order.state === 'closed' 
+                                    ? '<span class="px-2 py-0.5 text-xs rounded-full bg-green-500/20 text-green-400">✅ Доставлен</span>'
+                                    : `<select onchange="updateOrderStatus('${order.id}', this.value)" class="px-2 py-0.5 text-xs rounded-full bg-slate-700 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                        <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>⏳ Новый</option>
+                                        <option value="preparing" ${order.status === 'preparing' ? 'selected' : ''}>👨‍🍳 Сборка</option>
+                                        <option value="delivering" ${order.status === 'delivering' ? 'selected' : ''}>🚚 В пути</option>
+                                        <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>✅ Доставлен</option>
+                                        <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>❌ Отменён</option>
+                                    </select>`
+                                }
                             </div>
-                            <p class="text-slate-400 text-sm">${new Date(order.timestamp).toLocaleString()}</p>
+                            <p class="text-slate-400 text-sm">${new Date(order.timestamp).toLocaleString('ru-RU')}</p>
                         </div>
                         <div class="text-right">
                             <p class="text-xl font-bold">EGP ${(order.total || 0).toFixed(2)}</p>
@@ -691,12 +511,12 @@
                     </div>
                     <div class="p-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
                         <div class="lg:col-span-2">
-                            <h5 class="text-sm font-medium text-slate-400 mb-2">📦 Customer & Delivery</h5>
+                            <h5 class="text-sm font-medium text-slate-400 mb-2">📦 Клиент и Доставка</h5>
                             <div class="space-y-2">
                                 <p class="font-medium">${order.customer?.name || 'N/A'}</p>
                                 <p class="text-slate-400 text-sm">📱 ${order.customer?.phone || 'N/A'}</p>
                                 <div class="bg-slate-900/50 rounded-lg p-3 mt-2">
-                                    <p class="text-xs text-slate-400 mb-1">📍 Delivery Address:</p>
+                                    <p class="text-xs text-slate-400 mb-1">📍 Адрес доставки:</p>
                                     <p class="text-sm text-white font-medium">${order.customer?.address || 'N/A'}</p>
                                 </div>
                                 ${order.delivery?.leaveAtDoor ? `
@@ -704,20 +524,20 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
                                         </svg>
-                                        <span>Leave at door</span>
+                                        <span>Оставить у двери</span>
                                     </div>
                                 ` : `
                                     <div class="flex items-center gap-2 text-green-400 text-sm mt-2">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
                                         </svg>
-                                        <span>Hand delivery required</span>
+                                        <span>Передать лично</span>
                                     </div>
                                 `}
                             </div>
                         </div>
                         <div>
-                            <h5 class="text-sm font-medium text-slate-400 mb-2">🛒 Items</h5>
+                            <h5 class="text-sm font-medium text-slate-400 mb-2">🛍️ Товары</h5>
                             <div class="space-y-1 max-h-40 overflow-y-auto scrollbar-thin">
                                 ${(order.items || []).map(item => `
                                     <div class="flex justify-between text-sm py-1 border-b border-slate-700/50">
@@ -733,87 +553,82 @@
         }
 
         async function refreshOrders() {
-            if (!CONFIG.firebaseConfig.databaseURL) {
-                showToast('Please configure Firebase first', 'error');
+            if (!githubToken) {
+                showToast('Подключитесь к GitHub', 'error');
                 return;
             }
 
             try {
-                showLoading('Refreshing orders...');
-                await loadOrdersFromFirebase();
-                showToast('Orders refreshed!', 'success');
+                showLoading('Обновление заказов...');
+                await loadOrdersFromIssues();
+                showToast('Заказы обновлены!', 'success');
             } catch (error) {
                 console.error('Refresh orders error:', error);
-                showToast('Failed to refresh orders: ' + error.message, 'error');
+                showToast('Ошибка обновления: ' + error.message, 'error');
             } finally {
                 hideLoading();
             }
         }
 
         async function updateOrderStatus(orderId, newStatus) {
+            if (!githubToken) {
+                showToast('Подключитесь к GitHub', 'error');
+                return;
+            }
+
             try {
                 // Find order
                 const order = orders.find(o => o.id === orderId);
                 if (!order) return;
 
-                // Update status
-                order.status = newStatus;
+                // Update labels based on status
+                const labels = ['order', newStatus];
 
-                // Update in Firebase
-                const url = `${CONFIG.firebaseUrl}/orders/${orderId}.json`;
+                // Update GitHub Issue labels
+                const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/issues/${order.issueId}/labels`;
                 const response = await fetch(url, {
-                    method: 'PATCH',
+                    method: 'PUT',
                     headers: {
+                        'Authorization': `token ${githubToken}`,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ status: newStatus })
+                    body: JSON.stringify({ labels })
                 });
 
                 if (!response.ok) {
                     throw new Error('Failed to update order status');
                 }
 
+                // Update local order status
+                order.status = newStatus;
+
+                // If delivered, close the issue
+                if (newStatus === 'delivered') {
+                    await closeIssue(order.issueId);
+                    order.state = 'closed';
+                }
+
                 renderOrders();
-                showToast('Order status updated!', 'success');
+
+                showToast('Статус обновлён!', 'success');
             } catch (error) {
                 console.error('Update order status error:', error);
-                showToast('Failed to update status: ' + error.message, 'error');
+                showToast('Ошибка обновления: ' + error.message, 'error');
                 // Revert on error
-                await loadOrdersFromFirebase();
+                await loadOrdersFromIssues();
             }
         }
 
-        async function clearAllOrders() {
-            if (!CONFIG.firebaseUrl || CONFIG.firebaseUrl.includes('YOUR-FIREBASE')) {
-                showToast('Please configure Firebase first', 'error');
-                return;
-            }
-
-            if (!confirm('Are you sure you want to delete ALL orders? This cannot be undone!')) return;
-
-            try {
-                showLoading('Clearing all orders...');
-
-                // Delete all orders from Firebase
-                const url = `${CONFIG.firebaseUrl}/orders.json`;
-                const response = await fetch(url, {
-                    method: 'DELETE'
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to clear orders');
-                }
-
-                orders = [];
-                renderOrders();
-
-                showToast('All orders cleared!', 'success');
-            } catch (error) {
-                console.error('Clear orders error:', error);
-                showToast('Failed to clear orders: ' + error.message, 'error');
-            } finally {
-                hideLoading();
-            }
+        async function closeIssue(issueId) {
+            const url = `https://api.github.com/repos/${CONFIG.owner}/${CONFIG.repo}/issues/${issueId}`;
+            await fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `token ${githubToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ state: 'closed' })
+            });
         }
 
         // Store Status
@@ -825,23 +640,23 @@
             
             if (isWorking) {
                 toggle.classList.add('active');
-                text.textContent = 'Open';
+                text.textContent = 'Открыт';
             } else {
                 toggle.classList.add('inactive');
-                text.textContent = 'Closed';
+                text.textContent = 'Закрыт';
             }
         }
 
         async function toggleStoreStatus() {
             if (!githubToken) {
-                showToast('Please connect to GitHub first', 'error');
+                showToast('Подключитесь к GitHub', 'error');
                 return;
             }
 
             let retries = 3;
             while (retries > 0) {
                 try {
-                    showLoading('Updating store status...');
+                    showLoading('Обновление статуса...');
 
                     // Get latest SHA and data
                     const { content: data, sha } = await getFileWithSha(CONFIG.databasePath, githubToken);
@@ -856,7 +671,7 @@
 
                     updateStoreStatusUI();
 
-                    showToast(`Store is now ${isWorking ? 'OPEN' : 'CLOSED'}`, 'success');
+                    showToast(`Магазин теперь ${isWorking ? 'ОТКРЫТ' : 'ЗАКРЫТ'}`, 'success');
                     hideLoading();
                     return; // Success, exit loop
                 } catch (error) {
@@ -882,7 +697,7 @@
                         }
                     }
 
-                    showToast('Failed to toggle status: ' + error.message, 'error');
+                    showToast('Ошибка: ' + error.message, 'error');
                     hideLoading();
                     return;
                 }
@@ -890,26 +705,9 @@
         }
 
         // Event Listeners
-        document.getElementById('addProductForm').addEventListener('submit', addProduct);
-
-        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // Load saved configs
-            const savedFirebaseUrl = localStorage.getItem('madina_firebase_url');
-            const savedGithubToken = localStorage.getItem('madina_github_token');
-
-            if (savedFirebaseUrl) {
-                document.getElementById('firebaseUrl').value = savedFirebaseUrl;
-                CONFIG.firebaseUrl = savedFirebaseUrl;
-                document.getElementById('configSection').style.display = 'none';
-            }
-            if (savedGithubToken) {
-                document.getElementById('githubToken').value = savedGithubToken;
-                githubToken = savedGithubToken;
-            }
-
-            // Auto-load if Firebase configured
-            if (savedFirebaseUrl) {
+            // Load saved token
+            if (githubToken) {
                 document.getElementById('configSection').style.display = 'none';
                 loadData();
             }
