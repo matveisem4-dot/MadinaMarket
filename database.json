@@ -8,6 +8,14 @@
       "category": "Сладкое",
       "description": "Без доставки, испортится",
       "image": "https://png.klev.club/uploads/posts/2024-04/png-klev-club-mv2k-p-vata-sakharnaya-png-11.png"
+    },
+    {
+      "id": "1776363714834",
+      "name": "Кока кола",
+      "price": 30,
+      "category": "Напитки",
+      "description": "Доставим",
+      "image": "https://ru.wikipedia.org/wiki/%D0%A4%D0%B0%D0%B9%D0%BB:15-09-26-RalfR-WLC-0098_-_Coca-Cola_glass_bottle_(Germany).jpg"
     }
   ]
 }
