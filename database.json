@@ -1,4 +1,13 @@
 {
   "isWorking": true,
-  "products": []
+  "products": [
+    {
+      "id": "1776360202169",
+      "name": "Сладкая вата",
+      "price": 25,
+      "category": "Сладкое",
+      "description": "Без доставки, испортится",
+      "image": "https://png.klev.club/uploads/posts/2024-04/png-klev-club-mv2k-p-vata-sakharnaya-png-11.png"
+    }
+  ]
 }
