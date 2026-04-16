@@ -8,6 +8,14 @@
       "category": "Сладкое",
       "description": "Без доставки, испортится",
       "image": "https://png.klev.club/uploads/posts/2024-04/png-klev-club-mv2k-p-vata-sakharnaya-png-11.png"
+    },
+    {
+      "id": "1776363479556",
+      "name": "Кока кола",
+      "price": 30,
+      "category": "Напитки",
+      "description": "Доставляем до двери",
+      "image": "https://www.rimi.ee/epood/ru/produkty/1350156/zoom"
     }
   ]
 }
