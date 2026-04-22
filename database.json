@@ -16,6 +16,14 @@
       "category": "снэки",
       "description": null,
       "image": "https://image.mm.ru/d2fm29qc8gr8roucj9t0/t_product_high.jpg"
+    },
+    {
+      "id": "1776857597794",
+      "name": "Coca-cola.",
+      "price": 24.99,
+      "category": "напитки",
+      "description": null,
+      "image": "https://beer-city.am/media/coca_cola_classic_500ml_large-min.jpg"
     }
   ]
 }
