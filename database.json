@@ -8,6 +8,14 @@
       "category": "Сладкое",
       "description": "Без доставки, испортится",
       "image": "https://png.klev.club/uploads/posts/2024-04/png-klev-club-mv2k-p-vata-sakharnaya-png-11.png"
+    },
+    {
+      "id": "1776857492158",
+      "name": "Чипсики с сметаной и зеленью.",
+      "price": 30,
+      "category": "снэки",
+      "description": null,
+      "image": "https://image.mm.ru/d2fm29qc8gr8roucj9t0/t_product_high.jpg"
     }
   ]
 }
