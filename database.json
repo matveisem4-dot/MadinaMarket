@@ -40,6 +40,14 @@
       "category": "сладкое",
       "description": "Доставка 5 фунтов до домов А, 10 фунтов до домов Б, 15 фунтов до домов С, 20 фунтов до домов D",
       "image": "https://cdn.mafrservices.com/sys-master-root/h31/h6f/49727356731422/592198_main.jpg?im=Resize=376"
+    },
+    {
+      "id": "1777024596569",
+      "name": "Coca-cola.",
+      "price": 25,
+      "category": "напитки",
+      "description": "Доставка 5 фунтов до домов А, 10 фунтов до домов Б, 15 фунтов до домов С, 20 фунтов до домов D",
+      "image": "https://beer-city.am/media/coca_cola_classic_500ml_large-min.jpg"
     }
   ]
 }
