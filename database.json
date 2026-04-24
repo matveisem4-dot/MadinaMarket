@@ -18,14 +18,6 @@
       "image": "https://beer-city.am/media/coca_cola_classic_500ml_large-min.jpg"
     },
     {
-      "id": "1776857753820",
-      "name": "Холс",
-      "price": 25,
-      "category": "сладкое",
-      "description": null,
-      "image": "https://cdn.mafrservices.com/sys-master-root/h31/h6f/49727356731422/592198_main.jpg?im=Resize=376"
-    },
-    {
       "id": "1777023898695",
       "name": "Чипсики с сыром и луком",
       "price": 20,
