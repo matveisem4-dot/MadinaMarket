@@ -24,6 +24,14 @@
       "category": "напитки",
       "description": "Доставка 5 фунтов до домов А, 10 фунтов до домов Б, 15 фунтов до домов С, 20 фунтов до домов D",
       "image": "https://beer-city.am/media/coca_cola_classic_500ml_large-min.jpg"
+    },
+    {
+      "id": "1782748537619",
+      "name": "лр",
+      "price": 23,
+      "category": "п",
+      "description": null,
+      "image": null
     }
   ]
 }
