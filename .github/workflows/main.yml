@@ -1,0 +1,38 @@
+name: Madina Market Backend
+
+on:
+  repository_dispatch:
+    types: [create_order, toggle_status, add_product]
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Process Create Order
+        if: github.event.action == 'create_order'
+        run: |
+          jq '. += [env.PAYLOAD]' --argjson PAYLOAD '${{ toJson(github.event.client_payload) }}' orders.json > tmp.json && mv tmp.json orders.json
+
+      - name: Process Toggle Status
+        if: github.event.action == 'toggle_status'
+        run: |
+          jq '.isWorking = env.STATUS' --argjson STATUS '${{ github.event.client_payload.isWorking }}' database.json > tmp.json && mv tmp.json database.json
+
+      - name: Process Add Product
+        if: github.event.action == 'add_product'
+        run: |
+          jq '.products += [env.PRODUCT]' --argjson PRODUCT '${{ toJson(github.event.client_payload) }}' database.json > tmp.json && mv tmp.json database.json
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add database.json orders.json
+          git commit -m "Auto-update data from store interaction [skip ci]" || echo "No changes to commit"
+          git push
