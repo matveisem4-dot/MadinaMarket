@@ -1,13 +1,4 @@
 {
   "isWorking": true,
-  "products": [
-    {
-      "id": "1777024596569",
-      "name": "Coca-cola.",
-      "price": 25,
-      "category": "напитки",
-      "description": "Доставка 5 фунтов до домов А, 10 фунтов до домов Б, 15 фунтов до домов С, 20 фунтов до домов D",
-      "image": "https://beer-city.am/media/coca_cola_classic_500ml_large-min.jpg"
-    }
-  ]
+  "products": []
 }
