@@ -1,4 +1,13 @@
 {
   "isWorking": true,
-  "products": []
+  "products": [
+    {
+      "id": "1782922046353",
+      "name": "п",
+      "price": 0,
+      "category": "г",
+      "description": null,
+      "image": null
+    }
+  ]
 }
