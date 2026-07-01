@@ -1,13 +1,4 @@
 {
   "isWorking": false,
-  "products": [
-    {
-      "id": "1782923552340",
-      "name": "ирпнп",
-      "price": 0,
-      "category": null,
-      "description": null,
-      "image": null
-    }
-  ]
+  "products": []
 }
