@@ -1,13 +1,4 @@
 {
   "isWorking": true,
-  "products": [
-    {
-      "id": "1782923597448",
-      "name": "смрпр",
-      "price": 26546,
-      "category": null,
-      "description": null,
-      "image": null
-    }
-  ]
+  "products": []
 }
