@@ -1,4 +1,13 @@
 {
   "isWorking": true,
-  "products": []
+  "products": [
+    {
+      "id": "1783356641447",
+      "name": "kndsk",
+      "price": 1,
+      "category": null,
+      "description": null,
+      "image": null
+    }
+  ]
 }
