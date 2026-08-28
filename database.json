@@ -1,4 +1,13 @@
 {
   "isWorking": true,
-  "products": []
+  "products": [
+    {
+      "id": "PRD-UU50D49X1",
+      "name": "Ты уебок",
+      "price": 10000000,
+      "category": "Хуй",
+      "image": "",
+      "description": "Fresh quality product"
+    }
+  ]
 }
